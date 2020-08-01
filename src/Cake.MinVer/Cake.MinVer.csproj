@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Cake.MinVer</RootNamespace>
+
+    <AssemblyName>Cake.MinVer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <NoWarn>$(NoWarn);NU5048</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MinClientVersion>4.0.0</MinClientVersion>
+    <PackageId>Cake.MinVer</PackageId>
+    <Version>0.0.1-local</Version>
+    <Authors>C. Augusto Proiete &amp; Contributors</Authors>
+    <Company>augustoproiete.net</Company>
+    <Description>Cake add-in that makes MinVer available as a tool in Cake.</Description>
+    <Copyright>Copyright 2020 C. Augusto Proiete &amp; Contributors - Provided under the Apache License, Version 2.0</Copyright>
+    <PackageTags>cake;minver;cake-addin;cake-build;cake-contrib</PackageTags>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>images\icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/augustoproiete/Cake.MinVer/master/assets/cake-minver-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/augustoproiete/Cake.MinVer</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/augustoproiete/Cake.MinVer/releases</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/augustoproiete/Cake.MinVer</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cake.Core" Version="0.33.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Common" Version="0.33.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\cake-minver-nuget.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
+  </ItemGroup>
+
+</Project>

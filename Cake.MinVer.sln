@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{A17F6CAD-6E1D-4F5B-8140-24958CA0748D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		build.cake = build.cake
+		cake.config = cake.config
+		CHANGES.md = CHANGES.md
+		CODEOWNERS = CODEOWNERS
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{39E0B476-6754-4FCE-B6C6-61783D57E94F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{31D2C35C-5A44-4B2C-A441-C0FAF47AF452}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.MinVer", "src\Cake.MinVer\Cake.MinVer.csproj", "{FC01B04E-3A39-4894-993B-DE637E0A0382}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.MinVer.Tests", "test\Cake.MinVer.Tests\Cake.MinVer.Tests.csproj", "{042B93C7-FA3B-453D-B29C-2E0992F94B58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC01B04E-3A39-4894-993B-DE637E0A0382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC01B04E-3A39-4894-993B-DE637E0A0382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC01B04E-3A39-4894-993B-DE637E0A0382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC01B04E-3A39-4894-993B-DE637E0A0382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{042B93C7-FA3B-453D-B29C-2E0992F94B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{042B93C7-FA3B-453D-B29C-2E0992F94B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{042B93C7-FA3B-453D-B29C-2E0992F94B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{042B93C7-FA3B-453D-B29C-2E0992F94B58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC01B04E-3A39-4894-993B-DE637E0A0382} = {39E0B476-6754-4FCE-B6C6-61783D57E94F}
+		{042B93C7-FA3B-453D-B29C-2E0992F94B58} = {31D2C35C-5A44-4B2C-A441-C0FAF47AF452}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18E76962-5395-46C7-8CCF-476EC8581FE7}
+	EndGlobalSection
+EndGlobal
