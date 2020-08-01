@@ -1,23 +1,28 @@
-var target       = Argument<string>("target", "pack");
+var target       = Argument<string>("target", "publish");
 var buildVersion = Argument<string>("buildVersion", "0.0.1-local");
-
-#tool "nuget:?package=NuGet.CommandLine&version=5.6.0"
 
 Task("clean")
     .Does(() =>
 {
     CleanDirectory("./build/artifacts");
+    CleanDirectories("./src/**/bin");
+    CleanDirectories("./src/**/obj");
+    CleanDirectories("./test/**/bin");
+    CleanDirectories("./test/**/obj");
 });
 
 Task("restore")
     .IsDependentOn("clean")
     .Does(() =>
 {
-    NuGetRestore("./Cake.MinVer.sln");
+    DotNetCoreRestore("./Cake.MinVer.sln", new DotNetCoreRestoreSettings
+    {
+        LockedMode = true,
+    });
 });
 
 Task("build")
-    .IsDependentOn("clean")
+    .IsDependentOn("restore")
     .Does(() =>
 {
     DotNetCoreBuild("./Cake.MinVer.sln", new DotNetCoreBuildSettings
@@ -95,14 +100,15 @@ Task("publish")
         return;
     }
 
+    var nugetPushSettings = new DotNetCoreNuGetPushSettings
+    {
+        Source = url,
+        ApiKey = apiKey,
+    };
+
     foreach (var nugetPackageFile in GetFiles("./build/artifacts/*.nupkg"))
     {
-        context.Information($"Publishing {nugetPackageFile}...");
-        context.NuGetPush(nugetPackageFile, new NuGetPushSettings
-        {
-            Source = url,
-            ApiKey = apiKey,
-        });
+        DotNetCoreNuGetPush(nugetPackageFile.FullPath, nugetPushSettings);
     }
 });
 
