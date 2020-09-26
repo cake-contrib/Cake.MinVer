@@ -1,5 +1,7 @@
+#addin "nuget:?package=Cake.MinVer&version=0.1.0"
+
 var target       = Argument<string>("target", "publish");
-var buildVersion = Argument<string>("buildVersion", "0.0.1-local");
+var buildVersion = MinVer(s => s.WithTagPrefix("v").WithDefaultPreReleasePhase("preview"));
 
 Task("clean")
     .Does(() =>
@@ -31,7 +33,7 @@ Task("build")
         NoRestore = true,
         NoIncremental = false,
         ArgumentCustomization = args =>
-            args.AppendQuoted($"-p:Version={buildVersion}")
+            args.AppendQuoted($"-p:Version={buildVersion.Version}")
                 .AppendQuoted($"-p:ContinuousIntegrationBuild=true")
     });
 
@@ -41,7 +43,7 @@ Task("build")
         NoRestore = true,
         NoIncremental = false,
         ArgumentCustomization = args =>
-            args.AppendQuoted($"-p:Version={buildVersion}")
+            args.AppendQuoted($"-p:Version={buildVersion.Version}")
                 .AppendQuoted($"-p:ContinuousIntegrationBuild=true")
     });
 });
@@ -68,7 +70,7 @@ Task("pack")
     .IsDependentOn("test")
     .Does(() =>
 {
-    var releaseNotes = $"https://github.com/augustoproiete/Cake.MinVer/releases/tag/v{buildVersion}";
+    var releaseNotes = $"https://github.com/augustoproiete/Cake.MinVer/releases/tag/v{buildVersion.Version}";
 
     DotNetCorePack("./src/Cake.MinVer/Cake.MinVer.csproj", new DotNetCorePackSettings
     {
@@ -77,7 +79,7 @@ Task("pack")
         NoBuild = true,
         OutputDirectory = "./build/artifacts",
         ArgumentCustomization = args =>
-            args.AppendQuoted($"-p:Version={buildVersion}")
+            args.AppendQuoted($"-p:Version={buildVersion.Version}")
                 .AppendQuoted($"-p:PackageReleaseNotes={releaseNotes}")
     });
 });
