@@ -34,6 +34,7 @@ Task("build")
         NoIncremental = false,
         ArgumentCustomization = args =>
             args.AppendQuoted($"-p:Version={buildVersion.Version}")
+                .AppendQuoted($"-p:FileVersion={buildVersion.FileVersion}")
                 .AppendQuoted($"-p:ContinuousIntegrationBuild=true")
     });
 
@@ -44,6 +45,7 @@ Task("build")
         NoIncremental = false,
         ArgumentCustomization = args =>
             args.AppendQuoted($"-p:Version={buildVersion.Version}")
+                .AppendQuoted($"-p:FileVersion={buildVersion.FileVersion}")
                 .AppendQuoted($"-p:ContinuousIntegrationBuild=true")
     });
 });
