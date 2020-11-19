@@ -106,5 +106,12 @@ namespace Cake.MinVer.Tests
             new MinVerVersion("1.2.3-Alpha.4+abcdefg").Version.Should().Be("1.2.3-Alpha.4+abcdefg");
             new MinVerVersion("1.2.3-alpha.4+Abcdefg").Version.Should().Be("1.2.3-alpha.4+Abcdefg");
         }
+
+        [Fact]
+        public void Should_Convert_to_string_implicitly()
+        {
+            string versionString = new MinVerVersion("1.2.3-alpha.4+abcdefg");
+            versionString.Should().Be("1.2.3-alpha.4+abcdefg");
+        }
     }
 }
