@@ -134,6 +134,18 @@ namespace Cake.MinVer
             return NaturalStringComparer.Instance.Compare(BuildMetadata, other.BuildMetadata);
         }
 
+        /// <summary>
+        /// Implicit conversion from <see cref="MinVerVersion"/> to <see cref="string"/> to simplify use in build scripts.
+        /// </summary>
+        /// <param name="version">The MinVer version.</param>
+        /// <returns>The original, non-normalized version string.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="version"/> is <see langword="null"/>.</exception>
+        public static implicit operator string(MinVerVersion version)
+        {
+            if (version is null) throw new ArgumentNullException(nameof(version));
+            return version.ToString();
+        }
+
         internal class NaturalStringComparer : IComparer<string>
         {
             private static readonly Lazy<NaturalStringComparer> _instance = new Lazy<NaturalStringComparer>(isThreadSafe: true);
