@@ -113,5 +113,14 @@ namespace Cake.MinVer.Tests
             string versionString = new MinVerVersion("1.2.3-alpha.4+abcdefg");
             versionString.Should().Be("1.2.3-alpha.4+abcdefg");
         }
+
+        [Fact]
+        public void Should_Set_IsPreRelease()
+        {
+            new MinVerVersion("1.2.3").IsPreRelease.Should().Be(false);
+            new MinVerVersion("1.2.3-alpha").IsPreRelease.Should().Be(true);
+            new MinVerVersion("1.2.3-alpha.4").IsPreRelease.Should().Be(true);
+            new MinVerVersion("1.2.3-alpha.4+abcdefg").IsPreRelease.Should().Be(true);
+        }
     }
 }

@@ -93,6 +93,7 @@ dotnet tool install --global minver-cli
 | Minor                | `int`    | The minor version number                    |
 | Patch                | `int`    | The patch version number                    |
 | PreRelease           | `string` | The pre-release extension                   |
+| IsPreRelease         | `bool`   | `true` if `PreRelease` is not null or empty |
 | BuildMetadata        | `string` | The build metadata extension                |
 | AssemblyVersion      | `string` | `{Major}.0.0.0`                             |
 | FileVersion          | `string` | `{Major}.{Minor}.{Patch}.0`                 |
