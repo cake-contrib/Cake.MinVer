@@ -69,6 +69,12 @@ namespace Cake.MinVer
         public string PreRelease { get; }
 
         /// <summary>
+        /// Returns <see langword="true"/> when <see cref="PreRelease" /> is not null or empty
+        /// otherwise <see langword="false"/>
+        /// </summary>
+        public bool IsPreRelease => !string.IsNullOrWhiteSpace(PreRelease);
+
+        /// <summary>
         /// The Build metadata extension
         /// </summary>
         public string BuildMetadata { get; }
