@@ -60,6 +60,33 @@ namespace Cake.MinVer.Tests
         }
 
         [Fact]
+        public void Should_Set_PreferGlobalTool_via_WithPreferGlobalTool()
+        {
+            var settings = new MinVerSettings()
+                .WithPreferGlobalTool();
+
+            settings.PreferGlobalTool.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Should_Set_NoFallback_via_WithNoFallback()
+        {
+            var settings = new MinVerSettings()
+                .WithNoFallback();
+
+            settings.NoFallback.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Should_Set_ToolPath_via_WithToolPath()
+        {
+            var settings = new MinVerSettings()
+                .WithToolPath(@"c:\myCustomTools\minver.exe");
+
+            settings.ToolPath.FullPath.Should().Be(@"c:/myCustomTools/minver.exe");
+        }
+
+        [Fact]
         public void Should_Set_Verbosity_via_WithVerbosity()
         {
             var settings = new MinVerSettings()
