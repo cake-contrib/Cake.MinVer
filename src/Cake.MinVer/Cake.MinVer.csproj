@@ -5,7 +5,7 @@
     <RootNamespace>Cake.MinVer</RootNamespace>
 
     <AssemblyName>Cake.MinVer</AssemblyName>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
