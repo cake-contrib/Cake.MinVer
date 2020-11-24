@@ -50,11 +50,6 @@ namespace Cake.MinVer
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            if (string.IsNullOrWhiteSpace(buildMetadata))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(buildMetadata));
-            }
-
             settings.BuildMetadata = buildMetadata;
 
             return settings;
@@ -75,11 +70,6 @@ namespace Cake.MinVer
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            if (string.IsNullOrWhiteSpace(defaultPreReleasePhase))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(defaultPreReleasePhase));
-            }
-
             settings.DefaultPreReleasePhase = defaultPreReleasePhase;
 
             return settings;
@@ -98,11 +88,6 @@ namespace Cake.MinVer
             if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
-            }
-
-            if (string.IsNullOrWhiteSpace(minimumMajorMinor))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(minimumMajorMinor));
             }
 
             settings.MinimumMajorMinor = minimumMajorMinor;
@@ -141,11 +126,6 @@ namespace Cake.MinVer
             if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
-            }
-
-            if (string.IsNullOrWhiteSpace(tagPrefix))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(tagPrefix));
             }
 
             settings.TagPrefix = tagPrefix;
