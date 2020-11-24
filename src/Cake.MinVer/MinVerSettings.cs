@@ -48,6 +48,30 @@ namespace Cake.MinVer
         public string TagPrefix { get; set; }
 
         /// <summary>
+        /// By default, MinVer is executed as a local tool first and, in case of error, fallback(*) to global tool
+        /// Set <see cref="PreferGlobalTool" /> to <see langword="true" /> to execute MinVer as global tool first and,
+        /// in case of an error, fallback(*) to local tool
+        /// 
+        /// (*) Unless the fallback is disabled via <see cref="NoFallback" />
+        /// 
+        /// Local tool = `dotnet minver`
+        /// Global tool = `minver`
+        /// </summary>
+        public bool PreferGlobalTool { get; set; }
+
+        /// <summary>
+        /// By default, MinVer is executed as a local tool first(*) and, in case of error, fallback to global tool(*)
+        /// Set <see cref="NoFallback" /> to <see langword="true" /> to disable the fallback in case of an error
+        /// 
+        /// (*) Unless <see cref="PreferGlobalTool" /> is set to <see langword="true" />, in which case MinVer is
+        /// executed as a global tool first and, in case of an error, fallback to local tool
+        /// 
+        /// Local tool = `dotnet minver`
+        /// Global tool = `minver`
+        /// </summary>
+        public bool NoFallback { get; set; }
+
+        /// <summary>
         /// Set the verbosity.
         /// --verbosity &lt;VERBOSITY&gt;
         /// error, warn, info (default), debug, or trace

@@ -1,170 +1,177 @@
-﻿using System;
-using Cake.Core;
+﻿using Cake.Core;
+using Cake.MinVer.Tests.Support;
 using Cake.Testing;
 using FluentAssertions;
 using Xunit;
 
 namespace Cake.MinVer.Tests
 {
-    public sealed class MinVerToolTests
+    public class MinVerToolTests
     {
         [Fact]
-        public void Should_Throw_If_Settings_Are_Null()
+        public void Should_Run_Local_Tool_First_By_Default()
         {
-            var fixture = new MinVerToolFixture
+            var localToolFixture = new MinVerLocalToolFixture
             {
-                Settings = null,
+                StandardOutput = MinVerToolOutputs.OutputWhenTagFoundDefaultVerbosity,
             };
 
-            fixture.GivenDefaultToolDoNotExist();
+            var globalToolFixture = new MinVerGlobalToolFixture("does-not-exist.exe");
 
-            fixture.Invoking(f => f.Run())
-                .Should().ThrowExactly<ArgumentNullException>()
-                .And.ParamName.Should().Be("settings");
+            var fixture = new MinVerToolFixture
+            {
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+            };
+
+            var _ = fixture.Run();
+
+            fixture.Result.Version.Should().Be("5.0.1-alpha.0.8");
         }
 
         [Fact]
-        public void Should_Add_Mandatory_Arguments()
+        public void Should_Run_Global_Tool_First_If_PreferGlobalTool()
         {
-            var fixture = new MinVerToolFixture();
-            var result = fixture.Run();
+            var localToolFixture = new MinVerLocalToolFixture("does-not-exist.exe");
 
-            result.Args.Should().Be("minver");
-        }
-
-        [Theory]
-        [InlineData(MinVerAutoIncrement.Default, "minver")]
-        [InlineData(MinVerAutoIncrement.Major, "minver --auto-increment major")]
-        [InlineData(MinVerAutoIncrement.Minor, "minver --auto-increment minor")]
-        [InlineData(MinVerAutoIncrement.Patch, "minver --auto-increment patch")]
-        public void Should_Add_Auto_Increment_To_Arguments(MinVerAutoIncrement autoIncrement, string expectedArgs)
-        {
-            var fixture = new MinVerToolFixture
+            var globalToolFixture = new MinVerGlobalToolFixture
             {
-                Settings =
-                {
-                    AutoIncrement = autoIncrement,
-                },
+                StandardOutput = MinVerToolOutputs.OutputWhenTagFoundVerbosityError,
             };
 
-            var result = fixture.Run();
+            var fixture = new MinVerToolFixture
+            {
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+                Settings = { PreferGlobalTool = true },
+            };
 
-            result.Args.Should().Be(expectedArgs);
+            var _ = fixture.Run();
+
+            fixture.Result.Version.Should().Be("1.2.3-preview.0.4");
         }
 
         [Fact]
-        public void Should_Add_Build_Metadata_Arguments()
+        public void Should_Run_Local_Tool_First_By_Default_And_Fallback_To_Global_Tool()
         {
-            var fixture = new MinVerToolFixture
+            var localToolFixture = new MinVerLocalToolFixture();
+            localToolFixture.ProcessRunner.Process.SetExitCode(1);
+
+            var globalToolFixture = new MinVerGlobalToolFixture
             {
-                Settings =
-                {
-                    BuildMetadata = "1234abc",
-                },
+                StandardOutput = MinVerToolOutputs.OutputWhenTagFoundVerbosityError,
             };
 
-            var result = fixture.Run();
+            var fixture = new MinVerToolFixture
+            {
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+            };
 
-            result.Args.Should().Be("minver --build-metadata \"1234abc\"");
+            var _ = fixture.Run();
+
+            fixture.Result.Version.Should().Be("1.2.3-preview.0.4");
         }
 
         [Fact]
-        public void Should_Add_Default_Pre_Release_Phase_Arguments()
+        public void Should_Run_Global_Tool_First_If_PreferGlobalTool_And_Fallback_To_Global_Tool()
         {
-            var fixture = new MinVerToolFixture
+            var localToolFixture = new MinVerLocalToolFixture
             {
-                Settings =
-                {
-                    DefaultPreReleasePhase = "preview",
-                },
+                StandardOutput = MinVerToolOutputs.OutputWhenTagFoundDefaultVerbosity,
             };
 
-            var result = fixture.Run();
+            var globalToolFixture = new MinVerGlobalToolFixture();
+            globalToolFixture.ProcessRunner.Process.SetExitCode(1);
 
-            result.Args.Should().Be("minver --default-pre-release-phase \"preview\"");
+            var fixture = new MinVerToolFixture
+            {
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+                Settings = { PreferGlobalTool = true },
+            };
+
+            var _ = fixture.Run();
+
+            fixture.Result.Version.Should().Be("5.0.1-alpha.0.8");
         }
 
         [Fact]
-        public void Should_Add_Minimum_Major_Minor_Arguments()
+        public void Should_Not_Fallback_If_NoFallback_Is_True()
         {
+            var localToolFixture = new MinVerLocalToolFixture();
+            localToolFixture.ProcessRunner.Process.SetExitCode(1);
+
+            var globalToolFixture = new MinVerGlobalToolFixture("does-not-exist.exe");
+
             var fixture = new MinVerToolFixture
             {
-                Settings =
-                {
-                    MinimumMajorMinor = "2.0",
-                },
-            };
-
-            var result = fixture.Run();
-
-            result.Args.Should().Be("minver --minimum-major-minor \"2.0\"");
-        }
-
-        [Fact]
-        public void Should_Add_Repo_Arguments()
-        {
-            var fixture = new MinVerToolFixture
-            {
-                Settings =
-                {
-                    Repo = "./src",
-                },
-            };
-
-            var result = fixture.Run();
-
-            result.Args.Should().Be("minver --repo \"src\"");
-        }
-
-        [Fact]
-        public void Should_Add_Tag_Prefix_Arguments()
-        {
-            var fixture = new MinVerToolFixture
-            {
-                Settings =
-                {
-                    TagPrefix = "v",
-                },
-            };
-
-            var result = fixture.Run();
-
-            result.Args.Should().Be("minver --tag-prefix \"v\"");
-        }
-
-        [Theory]
-        [InlineData(MinVerVerbosity.Default, "minver")]
-        [InlineData(MinVerVerbosity.Error, "minver --verbosity error")]
-        [InlineData(MinVerVerbosity.Warn, "minver --verbosity warn")]
-        [InlineData(MinVerVerbosity.Info, "minver --verbosity info")]
-        [InlineData(MinVerVerbosity.Debug, "minver --verbosity debug")]
-        [InlineData(MinVerVerbosity.Trace, "minver --verbosity trace")]
-        public void Should_Add_Verbosity_To_Arguments(MinVerVerbosity verbosity, string expectedArgs)
-        {
-            var fixture = new MinVerToolFixture
-            {
-                Settings =
-                {
-                    Verbosity = verbosity,
-                },
-            };
-
-            var result = fixture.Run();
-
-            result.Args.Should().Be(expectedArgs);
-        }
-
-        [Fact]
-        public void Should_Throw_Cake_Exception_If_Cant_Parse_MinVer_Version()
-        {
-            var fixture = new MinVerToolFixture
-            {
-                StandardOutput = new [] { "abcd" },
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+                Settings = { NoFallback = true },
             };
 
             fixture.Invoking(f => f.Run())
                 .Should().ThrowExactly<CakeException>()
-                .WithMessage("Version 'abcd' is not valid.");
+                .And.Message.Should().StartWith("MinVer: Process returned an error (exit code 1)");
+        }
+
+        [Fact]
+        public void Should_Prefer_Global_Tool_If_ToolPath_Is_Set()
+        {
+            var localToolFixture = new MinVerLocalToolFixture("does-not-exist.exe");
+
+            var globalToolFixture = new MinVerGlobalToolFixture
+            {
+                StandardOutput = MinVerToolOutputs.OutputWhenTagFoundVerbosityError,
+            };
+
+            var customToolExePath = globalToolFixture.DefaultToolPath.GetDirectory().CombineWithFilePath("customLocation/minver.exe");
+            globalToolFixture.FileSystem.CreateFile(customToolExePath);
+
+            var fixture = new MinVerToolFixture
+            {
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+                Settings =
+                {
+                    ToolPath = customToolExePath,
+                },
+            };
+
+            var _ = fixture.Run();
+
+            fixture.Result.Version.Should().Be("1.2.3-preview.0.4");
+        }
+
+        [Fact]
+        public void Should_Not_Fallback_If_ToolPath_Is_Set()
+        {
+            var localToolFixture = new MinVerLocalToolFixture("does-not-exist.exe");
+
+            var globalToolFixture = new MinVerGlobalToolFixture
+            {
+                StandardOutput = MinVerToolOutputs.OutputWhenTagFoundVerbosityError,
+            };
+
+            globalToolFixture.ProcessRunner.Process.SetExitCode(1);
+
+            var customToolExePath = globalToolFixture.DefaultToolPath.GetDirectory().CombineWithFilePath("customLocation/minver.exe");
+            globalToolFixture.FileSystem.CreateFile(customToolExePath);
+
+            var fixture = new MinVerToolFixture
+            {
+                LocalTool = localToolFixture,
+                GlobalTool = globalToolFixture,
+                Settings =
+                {
+                    ToolPath = customToolExePath,
+                },
+            };
+
+            fixture.Invoking(f => f.Run())
+                .Should().ThrowExactly<CakeException>()
+                .And.Message.Should().StartWith("MinVer: Process returned an error (exit code 1)");
         }
     }
 }

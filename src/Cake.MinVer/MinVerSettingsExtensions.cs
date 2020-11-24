@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.MinVer
 {
@@ -148,6 +149,72 @@ namespace Cake.MinVer
             }
 
             settings.TagPrefix = tagPrefix;
+
+            return settings;
+        }
+
+        /// <summary>
+        /// By default, MinVer is executed as a local tool first and, in case of error, fallback(*) to global tool
+        /// Set <see cref="MinVerSettings.PreferGlobalTool" /> to <see langword="true" /> to execute MinVer as global tool first and,
+        /// in case of an error, fallback(*) to local tool
+        ///
+        /// (*) Unless the fallback is disabled via <see cref="MinVerSettings.NoFallback" />
+        ///
+        /// Local tool = `dotnet minver`
+        /// Global tool = `minver`
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The <paramref name="settings" /> instance with <see cref="MinVerSettings.Repo" />.</returns>
+        public static MinVerSettings WithPreferGlobalTool(this MinVerSettings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.PreferGlobalTool = true;
+
+            return settings;
+        }
+
+        /// <summary>
+        /// By default, MinVer is executed as a local tool first(*) and, in case of error, fallback to global tool(*)
+        /// Set <see cref="MinVerSettings.NoFallback" /> to <see langword="true" /> to disable the fallback in case of an error
+        ///
+        /// (*) Unless <see cref="MinVerSettings.PreferGlobalTool" /> is set to <see langword="true" />, in which case MinVer is
+        /// executed as a global tool first and, in case of an error, fallback to local tool
+        ///
+        /// Local tool = `dotnet minver`
+        /// Global tool = `minver`
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The <paramref name="settings" /> instance with <see cref="MinVerSettings.Repo" />.</returns>
+        public static MinVerSettings WithNoFallback(this MinVerSettings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.NoFallback = true;
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Set a custom path to the minver.exe file.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="toolPath">The custom path to the minver.exe file.</param>
+        /// <returns>The <paramref name="settings" /> instance with <see cref="ToolSettings.ToolPath" /> set to <paramref name="toolPath" />.</returns>
+        public static MinVerSettings WithToolPath(this MinVerSettings settings, FilePath toolPath)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.ToolPath = toolPath ?? throw new ArgumentNullException(nameof(toolPath));
 
             return settings;
         }
