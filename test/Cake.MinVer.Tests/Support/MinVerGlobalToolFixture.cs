@@ -1,11 +1,16 @@
-﻿namespace Cake.MinVer.Tests.Support
+﻿using Cake.Core.IO;
+
+namespace Cake.MinVer.Tests.Support
 {
-    internal class MinVerGlobalToolFixture : MinVerToolFixture<MinVerGlobalTool>
+    internal class MinVerGlobalToolFixture : MinVerToolFixtureBase<MinVerGlobalTool>, IMinVerGlobalTool
     {
-        public MinVerGlobalToolFixture(string toolFilename = null)
-            : base(toolFilename ?? "minver.exe")
+        public MinVerGlobalToolFixture(MinVerToolFixture _, MinVerToolContext context)
+            : base(context)
         {
-            Tool = new MinVerGlobalTool(FileSystem, Environment, ProcessRunner, Tools, Log);
+            _tool = new MinVerGlobalTool(_.FileSystem, _.Environment, ProcessRunner, _.Tools, _.Log);
+            StandardOutput = MinVerToolOutputs.DefaultOutputForGlobalTool;
         }
+
+        public override FilePath DefaultToolPath => GetDefaultToolPath("minver.exe");
     }
 }

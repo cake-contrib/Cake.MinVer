@@ -7,11 +7,6 @@
     public enum MinVerVerbosity
     {
         /// <summary>
-        /// Omits the --verbosity argument (and uses MinVer's default)
-        /// </summary>
-        Default,
-
-        /// <summary>
         /// --verbosity error
         /// </summary>
         Error,

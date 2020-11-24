@@ -5,6 +5,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
+using Cake.MinVer.Utils;
 
 namespace Cake.MinVer
 {
@@ -13,8 +14,9 @@ namespace Cake.MinVer
     /// </summary>
     public class MinVerTool : DotNetCoreTool<MinVerSettings>
     {
-        private readonly MinVerLocalTool _localTool;
-        private readonly MinVerGlobalTool _globalTool;
+        private readonly IMinVerLocalTool _localTool;
+        private readonly IMinVerGlobalTool _globalTool;
+        private readonly IEnvironmentProvider _environmentProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MinVerTool" /> class.
@@ -24,24 +26,18 @@ namespace Cake.MinVer
         /// <param name="processRunner">The process runner.</param>
         /// <param name="tools">The tool locator.</param>
         /// <param name="log">Cake log instance.</param>
-        public MinVerTool(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            ICakeLog log) : this(fileSystem, environment, processRunner, tools, log, localTool: null, globalTool: null)
+        public MinVerTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+            IToolLocator tools, ICakeLog log)
+            : this(fileSystem, environment, processRunner, tools, log, localTool: null, globalTool: null)
         {
         }
 
-        internal MinVerTool(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            ICakeLog log,
-            MinVerLocalTool localTool,
-            MinVerGlobalTool globalTool) : base(fileSystem, environment, processRunner, tools)
+        internal MinVerTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+            IToolLocator tools, ICakeLog log, IMinVerLocalTool localTool, IMinVerGlobalTool globalTool)
+            : base(fileSystem, environment, processRunner, tools)
         {
+            _environmentProvider = new EnvironmentProvider(environment);
+
             CakeLog = log ?? throw new ArgumentNullException(nameof(log));
 
             _localTool = localTool ?? new MinVerLocalTool(fileSystem, environment, processRunner, tools, log);
@@ -60,25 +56,21 @@ namespace Cake.MinVer
         /// <returns>The MinVer calculated version information</returns>
         public MinVerVersion Run(MinVerSettings settings)
         {
+            CakeLog.Verbose("Executing {0} tool", GetToolName());
+
             if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            if (!(settings.ToolPath is null))
-            {
-                // If ToolPath is specified, it means it's a global tool in a custom location (also known as a tool-path tool)
-                // https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools
-                settings.PreferGlobalTool = true;
+            _environmentProvider.SetOverrides(settings.EnvironmentVariables);
 
-                // If ToolPath is specified, we try to run that specific tool only... No fallback
-                settings.NoFallback = true;
-            }
+            var finalSettings = CloneSettingsAndApplyEnvVariables(settings);
 
-            MinVerToolBase preferredTool;
-            MinVerToolBase fallbackTool;
+            IMinVerTool preferredTool;
+            IMinVerTool fallbackTool;
 
-            if (settings.PreferGlobalTool)
+            if (finalSettings.PreferGlobalTool.GetValueOrDefault())
             {
                 preferredTool = _globalTool;
                 fallbackTool = _localTool;
@@ -89,19 +81,19 @@ namespace Cake.MinVer
                 fallbackTool = _globalTool;
             }
 
-            var preferredToolExitCode = preferredTool.TryRun(settings, out var minVerVersion);
+            var preferredToolExitCode = preferredTool.TryRun(finalSettings, out var minVerVersion);
             if (preferredToolExitCode == 0)
             {
                 return minVerVersion;
             }
 
-            if (settings.NoFallback)
+            if (finalSettings.NoFallback.GetValueOrDefault())
             {
                 ProcessExitCode(preferredToolExitCode);
                 return null;
             }
 
-            var fallbackToolExitCode = fallbackTool.TryRun(settings, out minVerVersion);
+            var fallbackToolExitCode = fallbackTool.TryRun(finalSettings, out minVerVersion);
             if (fallbackToolExitCode == 0)
             {
                 CakeLog.Verbose(string.Format(CultureInfo.InvariantCulture,
@@ -126,6 +118,62 @@ namespace Cake.MinVer
         protected override string GetToolName()
         {
             return "MinVer";
+        }
+
+        private MinVerSettings CloneSettingsAndApplyEnvVariables(MinVerSettings settings)
+        {
+            var finalSettings = settings.Clone();
+
+            finalSettings.AutoIncrement = settings.AutoIncrement ?? _environmentProvider
+                .GetEnvironmentVariableAsEnum<MinVerAutoIncrement>(MinVerEnvironmentVariables.MINVERAUTOINCREMENT);
+
+            if (string.IsNullOrWhiteSpace(finalSettings.BuildMetadata))
+            {
+                finalSettings.BuildMetadata = _environmentProvider
+                    .GetEnvironmentVariable(MinVerEnvironmentVariables.MINVERBUILDMETADATA);
+            }
+
+            if (string.IsNullOrWhiteSpace(finalSettings.DefaultPreReleasePhase))
+            {
+                finalSettings.DefaultPreReleasePhase = _environmentProvider
+                    .GetEnvironmentVariable(MinVerEnvironmentVariables.MINVERDEFAULTPRERELEASEPHASE);
+            }
+
+            if (string.IsNullOrWhiteSpace(finalSettings.MinimumMajorMinor))
+            {
+                finalSettings.MinimumMajorMinor = _environmentProvider
+                    .GetEnvironmentVariable(MinVerEnvironmentVariables.MINVERMINIMUMMAJORMINOR);
+            }
+
+            if (string.IsNullOrWhiteSpace(finalSettings.TagPrefix))
+            {
+                finalSettings.TagPrefix = _environmentProvider
+                    .GetEnvironmentVariable(MinVerEnvironmentVariables.MINVERTAGPREFIX);
+            }
+
+            finalSettings.PreferGlobalTool ??= _environmentProvider
+                .GetEnvironmentVariableAsBool(MinVerEnvironmentVariables.MINVERPREFERGLOBALTOOL);
+
+            finalSettings.NoFallback ??= _environmentProvider
+                .GetEnvironmentVariableAsBool(MinVerEnvironmentVariables.MINVERNOFALLBACK);
+
+            finalSettings.Verbosity ??= _environmentProvider
+                .GetEnvironmentVariableAsEnum<MinVerVerbosity>(MinVerEnvironmentVariables.MINVERVERBOSITY);
+
+            finalSettings.ToolPath ??=  _environmentProvider
+                .GetEnvironmentVariableAsFilePath(MinVerEnvironmentVariables.MINVERTOOLPATH);
+
+            if (!(finalSettings.ToolPath is null))
+            {
+                // If ToolPath is specified, it means it's a global tool in a custom location (also known as a tool-path tool)
+                // https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools
+                finalSettings.PreferGlobalTool = true;
+
+                // If ToolPath is specified, we try to run that specific tool only... No fallback
+                finalSettings.NoFallback = true;
+            }
+
+            return finalSettings;
         }
     }
 }

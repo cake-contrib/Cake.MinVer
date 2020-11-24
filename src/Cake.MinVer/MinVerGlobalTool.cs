@@ -6,14 +6,11 @@ using Cake.Core.Tooling;
 
 namespace Cake.MinVer
 {
-    internal class MinVerGlobalTool : MinVerToolBase
+    internal class MinVerGlobalTool : MinVerToolBase, IMinVerGlobalTool
     {
-        public MinVerGlobalTool(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            ICakeLog log) : base(fileSystem, environment, processRunner, tools, log)
+        public MinVerGlobalTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+            IToolLocator tools, ICakeLog log)
+            : base(fileSystem, environment, processRunner, tools, log)
         {
         }
 
@@ -28,7 +25,7 @@ namespace Cake.MinVer
                 args.CopyTo(command);
             }
 
-            CakeLog.Verbose("{0} arguments: {1}", GetToolName(), args.RenderSafe());
+            CakeLog.Verbose("{0} arguments: [{1}]", GetToolName(), args.RenderSafe());
 
             return command;
         }

@@ -7,11 +7,6 @@
     public enum MinVerAutoIncrement
     {
         /// <summary>
-        /// Omits the --auto-increment argument (and uses MinVer's default)
-        /// </summary>
-        Default,
-
-        /// <summary>
         /// --auto-increment major
         /// </summary>
         Major,
