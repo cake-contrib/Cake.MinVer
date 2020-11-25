@@ -11,11 +11,11 @@ namespace Cake.MinVer.Tests
         {
             Action fixture = () =>
             {
-                var _ = new MinVerVersion(version: null);
+                var _ = new MinVerVersion(versionString: null);
             };
 
             fixture.Should().ThrowExactly<ArgumentException>()
-                .And.ParamName.Should().Be("version");
+                .And.ParamName.Should().Be("versionString");
         }
 
         [Fact]
@@ -121,6 +121,45 @@ namespace Cake.MinVer.Tests
             new MinVerVersion("1.2.3-alpha").IsPreRelease.Should().Be(true);
             new MinVerVersion("1.2.3-alpha.4").IsPreRelease.Should().Be(true);
             new MinVerVersion("1.2.3-alpha.4+abcdefg").IsPreRelease.Should().Be(true);
+        }
+
+        [Theory]
+        [InlineData("1.2.3")]
+        [InlineData("1.2.3-alpha")]
+        [InlineData("1.2.3-alpha.4")]
+        [InlineData("1.2.3-alpha.4+abcdefg")]
+        public void Should_Parse_Valid_Version_Strings(string versionString)
+        {
+            var version1 = new MinVerVersion(versionString);
+            var version2 = MinVerVersion.Parse(versionString);
+            var result = MinVerVersion.TryParse(versionString, out var version3);
+
+            result.Should().BeTrue();
+
+            version1.Version.Should().Be(versionString);
+            version2.Version.Should().Be(versionString);
+            version3.Version.Should().Be(versionString);
+
+            version1.Should().BeEquivalentTo(version2);
+            version2.Should().BeEquivalentTo(version3);
+        }
+
+        [Theory]
+        [InlineData("x.2.3")]
+        [InlineData("1x2.3")]
+        [InlineData("1.x.3")]
+        [InlineData("1.2x3")]
+        [InlineData("1.2.x")]
+        [InlineData("1.2.3xalpha")]
+        public void Should_Not_Parse_Invalid_Version_Strings(string versionString)
+        {
+            Action version1Fixture = () => { var _ = new MinVerVersion(versionString); };
+            Action version2Fixture = () => { var _ = MinVerVersion.Parse(versionString); };
+            var result = MinVerVersion.TryParse(versionString, out _);
+
+            version1Fixture.Should().ThrowExactly<FormatException>();
+            version2Fixture.Should().ThrowExactly<FormatException>();
+            result.Should().BeFalse();
         }
     }
 }
