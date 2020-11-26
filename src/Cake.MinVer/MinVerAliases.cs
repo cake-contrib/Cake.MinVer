@@ -18,7 +18,15 @@ namespace Cake.MinVer
         /// <example>
         /// <code>
         /// <![CDATA[
-        ///     MinVer();
+        /// var buildVersion = MinVer();
+        /// 
+        /// Information($"Version: {buildVersion.Version}");
+        /// Information($"Major: {buildVersion.Major}");
+        /// Information($"Minor: {buildVersion.Minor}");
+        /// Information($"Patch: {buildVersion.Patch}");
+        /// Information($"PreRelease: {buildVersion.PreRelease}");
+        /// Information($"BuildMetadata: {buildVersion.BuildMetadata}");
+        /// // ...
         /// ]]>
         /// </code>
         /// </example>
@@ -43,43 +51,73 @@ namespace Cake.MinVer
         /// <para>Increment the major version (e.g. 'dotnet minver --auto-increment major')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithAutoIncrement(MinVerAutoIncrement.Major));
+        /// var buildVersion = MinVer(settings => settings.WithAutoIncrement(MinVerAutoIncrement.Major));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the build metadata (e.g. 'dotnet minver --build-metadata abcdefg')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithBuildMetadata("abcdefg"));
+        /// var buildVersion = MinVer(settings => settings.WithBuildMetadata("abcdefg"));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the default pre-release phase (e.g. 'dotnet minver --default-pre-release-phase preview')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithDefaultPreReleasePhase("preview"));
+        /// var buildVersion = MinVer(settings => settings.WithDefaultPreReleasePhase("preview"));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the minimum major and minor version (e.g. 'dotnet minver --minimum-major-minor 2.5')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithMinimumMajorMinor("2.5"));
+        /// var buildVersion = MinVer(settings => settings.WithMinimumMajorMinor("2.5"));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the working directory for MinVer to use (e.g. 'dotnet minver --repo C:\MyProject')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithRepo(@"C:\MyProject"));
+        /// var buildVersion = MinVer(settings => settings.WithRepo(@"C:\MyProject"));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the tag prefix (e.g. 'dotnet minver --tag-prefix v')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithTagPrefix("v"));
+        /// var buildVersion = MinVer(settings => settings.WithTagPrefix("v"));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
+        /// ]]>
+        /// </code>
+        /// <para>Run MinVer as a global tool (e.g. 'minver'), instead of local tool (e.g. 'dotnet minver')</para>
+        /// <code>
+        /// <![CDATA[
+        /// var buildVersion = MinVer(settings => settings.WithPreferGlobalTool());
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
+        /// ]]>
+        /// </code>
+        /// <para>Disable the automatic fallback to global tool (or local tool) in case of errors</para>
+        /// <code>
+        /// <![CDATA[
+        /// var buildVersion = MinVer(settings => settings.WithNoFallback());
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the verbosity (e.g. 'dotnet minver --verbosity trace')</para>
         /// <code>
         /// <![CDATA[
-        ///     MinVer(settings => settings.WithVerbosity(MinVerVerbosity.Trace));
+        /// var buildVersion = MinVer(settings => settings.WithVerbosity(MinVerVerbosity.Trace));
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// </example>
@@ -111,85 +149,118 @@ namespace Cake.MinVer
         /// <para>Increment the major version (e.g. 'dotnet minver --auto-increment major')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             AutoIncrement = MinVerAutoIncrement.Major,
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     AutoIncrement = MinVerAutoIncrement.Major,
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the build metadata (e.g. 'dotnet minver --build-metadata abcdefg')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             BuildMetadata = "abcdefg",
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     BuildMetadata = "abcdefg",
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the default pre-release phase (e.g. 'dotnet minver --default-pre-release-phase preview')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             DefaultPreReleasePhase = "preview",
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     DefaultPreReleasePhase = "preview",
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the minimum major and minor version (e.g. 'dotnet minver --minimum-major-minor 2.5')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             MinimumMajorMinor = "2.5",
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     MinimumMajorMinor = "2.5",
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the working directory for MinVer to use (e.g. 'dotnet minver --repo C:\MyProject')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             Repo = @"C:\MyProject",
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     Repo = @"C:\MyProject",
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the tag prefix (e.g. 'dotnet minver --tag-prefix v')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             TagPrefix = "v",
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     TagPrefix = "v",
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
+        /// ]]>
+        /// </code>
+        /// <para>Run MinVer as a global tool (e.g. 'minver'), instead of local tool (e.g. 'dotnet minver')</para>
+        /// <code>
+        /// <![CDATA[
+        /// var settings = new MinVerSettings
+        /// {
+        ///     PreferGlobalTool = true,
+        /// };
+        /// 
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
+        /// ]]>
+        /// </code>
+        /// <para>Disable the automatic fallback to global tool (or local tool) in case of errors</para>
+        /// <code>
+        /// <![CDATA[
+        /// var settings = new MinVerSettings
+        /// {
+        ///     NoFallback = true,
+        /// };
+        /// 
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// <para>Set the verbosity (e.g. 'dotnet minver --verbosity trace')</para>
         /// <code>
         /// <![CDATA[
-        ///     var settings = 
-        ///         new MinVerSettings 
-        ///         {
-        ///             Verbosity = MinVerVerbosity.Trace,
-        ///         };
+        /// var settings = new MinVerSettings
+        /// {
+        ///     Verbosity = MinVerVerbosity.Trace,
+        /// };
         /// 
-        ///     MinVer(settings);
+        /// var buildVersion = MinVer(settings);
+        /// Information($"Version: {buildVersion.Version}");
+        /// // ...
         /// ]]>
         /// </code>
         /// </example>
