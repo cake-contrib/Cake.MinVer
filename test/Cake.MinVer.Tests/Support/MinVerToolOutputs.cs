@@ -1,4 +1,6 @@
-﻿namespace Cake.MinVer.Tests.Support
+﻿using System.Linq;
+
+namespace Cake.MinVer.Tests.Support
 {
     internal static class MinVerToolOutputs
     {
@@ -28,5 +30,11 @@
         {
             "1.2.3-preview.0.4",
         };
+
+        internal static readonly string[] DefaultOutputForLocalTool = OutputWhenTagFoundDefaultVerbosity;
+        internal static readonly string[] DefaultOutputForGlobalTool = OutputWhenTagFoundVerbosityError;
+
+        internal static readonly MinVerVersion DefaultVersionForLocalTool = new MinVerVersion(OutputWhenTagFoundDefaultVerbosity.Last());
+        internal static readonly MinVerVersion DefaultVersionForGlobalTool = new MinVerVersion(OutputWhenTagFoundVerbosityError.Last());
     }
 }

@@ -1,4 +1,5 @@
-﻿using Cake.Common.Tools.DotNetCore;
+﻿using System;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Core.IO;
 
 namespace Cake.MinVer
@@ -6,14 +7,14 @@ namespace Cake.MinVer
     /// <summary>
     /// Contains settings used by <see cref="MinVerTool" />.
     /// </summary>
-    public class MinVerSettings : DotNetCoreSettings
+    public class MinVerSettings : DotNetCoreSettings, ICloneable
     {
         /// <summary>
         /// Set the version part to be automatically incremented.
         /// --auto-increment &lt;VERSION_PART&gt;
         /// major, minor, or patch (default)
         /// </summary>
-        public MinVerAutoIncrement AutoIncrement { get; set; }
+        public MinVerAutoIncrement? AutoIncrement { get; set; }
 
         /// <summary>
         /// Set the build metadata.
@@ -57,7 +58,7 @@ namespace Cake.MinVer
         /// Local tool = `dotnet minver`
         /// Global tool = `minver`
         /// </summary>
-        public bool PreferGlobalTool { get; set; }
+        public bool? PreferGlobalTool { get; set; }
 
         /// <summary>
         /// By default, MinVer is executed as a local tool first(*) and, in case of error, fallback to global tool(*)
@@ -69,15 +70,55 @@ namespace Cake.MinVer
         /// Local tool = `dotnet minver`
         /// Global tool = `minver`
         /// </summary>
-        public bool NoFallback { get; set; }
+        public bool? NoFallback { get; set; }
 
         /// <summary>
         /// Set the verbosity.
         /// --verbosity &lt;VERBOSITY&gt;
         /// error, warn, info (default), debug, or trace
         /// </summary>
-        public new MinVerVerbosity Verbosity { get; set; }
+        public new MinVerVerbosity? Verbosity { get; set; }
 
-        internal DotNetCoreVerbosity? ToolVerbosity => base.Verbosity;
+        internal DotNetCoreVerbosity? ToolVerbosity
+        {
+            get => base.Verbosity;
+            set => base.Verbosity = value;
+        }
+
+        /// <summary>
+        /// Creates a shallow clone of this <see cref="MinVerSettings" /> instance
+        /// </summary>
+        /// <returns></returns>
+        public MinVerSettings Clone()
+        {
+            var clone = new MinVerSettings
+            {
+                AutoIncrement = AutoIncrement,
+                BuildMetadata = BuildMetadata,
+                DefaultPreReleasePhase = DefaultPreReleasePhase,
+                MinimumMajorMinor = MinimumMajorMinor,
+                Repo = Repo,
+                TagPrefix = TagPrefix,
+                PreferGlobalTool = PreferGlobalTool,
+                NoFallback = NoFallback,
+                Verbosity = Verbosity,
+                ToolVerbosity = ToolVerbosity,
+                
+                DiagnosticOutput = DiagnosticOutput,
+                ToolPath = ToolPath,
+                ToolTimeout = ToolTimeout,
+                WorkingDirectory = WorkingDirectory,
+                NoWorkingDirectory = NoWorkingDirectory,
+                ArgumentCustomization = ArgumentCustomization,
+                EnvironmentVariables = EnvironmentVariables,
+            };
+
+            return clone;
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
     }
 }
