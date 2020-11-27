@@ -2,7 +2,7 @@
 // Run the MinVer dotnet tool with default settings
 //
 
-#addin "nuget:?package=Cake.MinVer&version=0.1.0"
+#addin "nuget:?package=Cake.MinVer&version=0.2.0"
 
 var version = MinVer();
 
