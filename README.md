@@ -31,14 +31,14 @@ This add-in exposes the functionality of [MinVer](https://github.com/adamralph/m
 First of all, you need to import Cake.MinVer in your build script by using the [`add-in`](http://cakebuild.net/docs/fundamentals/preprocessor-directives) directive:
 
 ```csharp
-#addin "nuget:?package=Cake.MinVer&version=0.1.0"
+#addin "nuget:?package=Cake.MinVer&version=0.2.0"
 ```
 Make sure the `&version=` attribute references the [latest version of Cake.MinVer available on nuget.org](https://www.nuget.org/packages/Cake.MinVer/).
 
 Next, call `MinVer()` in order to get the version information using the default settings:
 
 ```csharp
-#addin "nuget:?package=Cake.MinVer&version=0.1.0"
+#addin "nuget:?package=Cake.MinVer&version=0.2.0"
 
 var version = MinVer();
 
