@@ -48,6 +48,7 @@ namespace Cake.MinVer.Tests
                 NoWorkingDirectory = true,
                 ArgumentCustomization = s => s,
                 EnvironmentVariables = new Dictionary<string, string> { { "MINVERTESTVAR", "SOMEVALUE" } },
+                HandleExitCode = i => false,
             };
 
             var actual = expected.Clone();
@@ -70,6 +71,7 @@ namespace Cake.MinVer.Tests
             actual.NoWorkingDirectory.Should().Be(expected.NoWorkingDirectory);
             actual.ArgumentCustomization.Should().Be(expected.ArgumentCustomization);
             actual.EnvironmentVariables.Should().BeEquivalentTo(expected.EnvironmentVariables);
+            actual.HandleExitCode.Should().BeEquivalentTo(expected.HandleExitCode);
 
             var properties = typeof(MinVerSettings)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
@@ -77,7 +79,7 @@ namespace Cake.MinVer.Tests
                 .ToList();
 
             // Sanity check & alarm to detect changes in properties that need to be considered in the cloning
-            properties.Should().HaveCount(17);
+            properties.Should().HaveCount(18);
         }
     }
 }

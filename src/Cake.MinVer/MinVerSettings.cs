@@ -125,6 +125,7 @@ namespace Cake.MinVer
                 NoWorkingDirectory = NoWorkingDirectory,
                 ArgumentCustomization = ArgumentCustomization,
                 EnvironmentVariables = EnvironmentVariables,
+                HandleExitCode = HandleExitCode,
             };
 
             return clone;
