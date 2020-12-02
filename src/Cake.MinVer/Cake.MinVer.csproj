@@ -33,11 +33,11 @@
     <PackageTags>cake;minver;cake-addin;cake-build;cake-contrib</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>
-    <PackageIconUrl>https://raw.githubusercontent.com/augustoproiete/Cake.MinVer/master/assets/cake-minver-nuget.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/augustoproiete/Cake.MinVer</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/augustoproiete/Cake.MinVer/releases</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/cake-contrib/Cake.MinVer/master/assets/cake-minver-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/cake-contrib/Cake.MinVer</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/cake-contrib/Cake.MinVer/releases</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/augustoproiete/Cake.MinVer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/cake-contrib/Cake.MinVer</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
