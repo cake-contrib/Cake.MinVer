@@ -10,9 +10,9 @@
 <h1 align="center">Cake.MinVer</h1>
 <div align="center">
 
- Cross-platform add-in for the [Cake](https://cakebuild.net) build automation system that enables you to use [MinVer](https://github.com/adamralph/minver) for versioning projects using Git tags. Cake.MinVer targets the .NET Standard 2.0 and runs on Windows, Linux, and macOS.
+Cross-platform add-in for the [Cake](https://cakebuild.net) build automation system that enables you to use [MinVer](https://github.com/adamralph/minver) for versioning projects using Git tags. Cake.MinVer targets the .NET Standard 2.0 and runs on Windows, Linux, and macOS.
 
-[![NuGet Version](http://img.shields.io/nuget/v/Cake.MinVer.svg?style=flat-square)](https://www.nuget.org/packages/Cake.MinVer/) [![Stack Overflow](https://img.shields.io/badge/stack%20overflow-cakebuild-orange.svg?style=flat-square)](http://stackoverflow.com/questions/tagged/cakebuild)
+[![NuGet Version](https://img.shields.io/nuget/v/Cake.MinVer.svg?color=blue&style=flat-square)](https://www.nuget.org/packages/Cake.MinVer/) [![Stack Overflow](https://img.shields.io/badge/stack%20overflow-cakebuild-orange.svg?style=flat-square)](http://stackoverflow.com/questions/tagged/cakebuild)
 
 </div>
 
@@ -166,10 +166,16 @@ In the [sample](sample/) folder, there are several examples of usage:
   - [Set the tag prefix](sample/minver-configurator-tag-prefix.cake)
   - [Set the verbosity](sample/minver-configurator-verbosity.cake)
 
+## Discussion
+
+For questions and to discuss ideas & feature requests, use the [GitHub discussions on the Cake GitHub repository](https://github.com/cake-build/cake/discussions), under the [Extension Q&A](https://github.com/cake-build/cake/discussions/categories/extension-q-a) category.
+
+[![Join in the discussion on the Cake repository](https://img.shields.io/badge/GitHub-Discussions-green?logo=github)](https://github.com/cake-build/cake/discussions)
+
 ## Release History
 
 Click on the [Releases](https://github.com/augustoproiete/Cake.MinVer/releases) tab on GitHub.
 
 ---
 
-_Copyright &copy; 2020 C. Augusto Proiete & Contributors - Provided under the [MIT License](LICENSE)._
+_Copyright &copy; 2020-2021 C. Augusto Proiete & Contributors - Provided under the [MIT License](LICENSE)._
