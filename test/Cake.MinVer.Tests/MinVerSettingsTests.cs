@@ -1,4 +1,4 @@
-﻿// Copyright 2020 C. Augusto Proiete & Contributors
+﻿#region Copyright 2020-2021 C. Augusto Proiete & Contributors
 //
 // Licensed under the MIT (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
+#endregion
 
 using System;
 using System.Collections.Generic;
@@ -48,6 +50,7 @@ namespace Cake.MinVer.Tests
                 NoWorkingDirectory = true,
                 ArgumentCustomization = s => s,
                 EnvironmentVariables = new Dictionary<string, string> { { "MINVERTESTVAR", "SOMEVALUE" } },
+                HandleExitCode = i => false,
             };
 
             var actual = expected.Clone();
@@ -70,6 +73,7 @@ namespace Cake.MinVer.Tests
             actual.NoWorkingDirectory.Should().Be(expected.NoWorkingDirectory);
             actual.ArgumentCustomization.Should().Be(expected.ArgumentCustomization);
             actual.EnvironmentVariables.Should().BeEquivalentTo(expected.EnvironmentVariables);
+            actual.HandleExitCode.Should().BeEquivalentTo(expected.HandleExitCode);
 
             var properties = typeof(MinVerSettings)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
@@ -77,7 +81,7 @@ namespace Cake.MinVer.Tests
                 .ToList();
 
             // Sanity check & alarm to detect changes in properties that need to be considered in the cloning
-            properties.Should().HaveCount(17);
+            properties.Should().HaveCount(18);
         }
     }
 }
