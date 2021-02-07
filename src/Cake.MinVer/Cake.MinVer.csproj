@@ -37,7 +37,7 @@
     <PackageProjectUrl>https://github.com/cake-contrib/Cake.MinVer</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/cake-contrib/Cake.MinVer/releases</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/cake-contrib/Cake.MinVer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/cake-contrib/Cake.MinVer.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
