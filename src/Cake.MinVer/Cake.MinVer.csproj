@@ -30,7 +30,7 @@
     <Company>augustoproiete.net</Company>
     <Description>Cake add-in that makes MinVer available as a tool in Cake.</Description>
     <Copyright>Copyright 2020-2021 C. Augusto Proiete &amp; Contributors - Provided under the MIT License</Copyright>
-    <PackageTags>cake;minver;cake-addin;cake-build;cake-contrib</PackageTags>
+    <PackageTags>cake;minver;cake-addin;cake-build;cake-contrib;addin;script;build;augustoproiete</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-contrib/Cake.MinVer/master/assets/cake-minver-nuget.png</PackageIconUrl>
