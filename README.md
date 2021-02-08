@@ -10,7 +10,7 @@
 <h1 align="center">Cake.MinVer</h1>
 <div align="center">
 
-Cross-platform add-in for the [Cake](https://cakebuild.net) build automation system that enables you to use [MinVer](https://github.com/adamralph/minver) for versioning projects using Git tags. Cake.MinVer targets the .NET Standard 2.0 and runs on Windows, Linux, and macOS.
+Cross-platform addin for the [Cake](https://cakebuild.net) build automation system that enables you to use [MinVer](https://github.com/adamralph/minver) for versioning projects using Git tags. Cake.MinVer targets the .NET Standard 2.0 and runs on Windows, Linux, and macOS.
 
 [![NuGet Version](https://img.shields.io/nuget/v/Cake.MinVer.svg?color=blue&style=flat-square)](https://www.nuget.org/packages/Cake.MinVer/) [![Stack Overflow](https://img.shields.io/badge/stack%20overflow-cakebuild-orange.svg?style=flat-square)](http://stackoverflow.com/questions/tagged/cakebuild)
 
@@ -26,19 +26,19 @@ In order to use Cake.MinVer, you will need to install [Cake](https://www.nuget.o
 
 ## Getting started :rocket:
 
-This add-in exposes the functionality of [MinVer](https://github.com/adamralph/minver) to the Cake DSL by being a very thin wrapper around its command line interface; this means that you can use Cake.MinVer in the same way as you would normally use [minver-cli](https://github.com/adamralph/minver#can-i-use-minver-to-version-software-which-is-not-built-using-a-net-sdk-style-project), but with a Cake-friendly interface.
+This addin exposes the functionality of [MinVer](https://github.com/adamralph/minver) to the Cake DSL by being a very thin wrapper around its command line interface; this means that you can use Cake.MinVer in the same way as you would normally use [minver-cli](https://github.com/adamralph/minver#can-i-use-minver-to-version-software-which-is-not-built-using-a-net-sdk-style-project), but with a Cake-friendly interface.
 
-First of all, you need to import Cake.MinVer in your build script by using the [`add-in`](http://cakebuild.net/docs/fundamentals/preprocessor-directives) directive:
+First of all, you need to import Cake.MinVer in your build script by using the [`addin`](http://cakebuild.net/docs/fundamentals/preprocessor-directives) directive:
 
 ```csharp
-#addin "nuget:?package=Cake.MinVer&version=0.2.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.0"
 ```
 Make sure the `&version=` attribute references the [latest version of Cake.MinVer available on nuget.org](https://www.nuget.org/packages/Cake.MinVer/).
 
 Next, call `MinVer()` in order to get the version information using the default settings:
 
 ```csharp
-#addin "nuget:?package=Cake.MinVer&version=0.2.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.0"
 
 var version = MinVer();
 
