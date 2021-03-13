@@ -27,3 +27,5 @@ Thumbs.db
 .cake/
 /build/*
 /tools/*
+
+*.received.*

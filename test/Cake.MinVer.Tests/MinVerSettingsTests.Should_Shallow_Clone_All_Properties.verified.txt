@@ -1,0 +1,52 @@
+{
+  AutoIncrement: Minor,
+  BuildMetadata: 123,
+  DefaultPreReleasePhase: preview,
+  MinimumMajorMinor: 1.2,
+  Repo: {
+    FullPath: /repo/custom,
+    Separator: "/",
+    Segments: [
+      /repo,
+      custom
+    ]
+  },
+  TagPrefix: v,
+  PreferGlobalTool: true,
+  NoFallback: true,
+  Verbosity: Trace,
+  DiagnosticOutput: true,
+  ToolPath: {
+    HasExtension: true,
+    FullPath: /tools/custom/minver.exe,
+    Separator: "/",
+    Segments: [
+      /tools,
+      custom,
+      minver.exe
+    ]
+  },
+  ToolTimeout: 00:05:00,
+  WorkingDirectory: {
+    FullPath: /working/folder,
+    Separator: "/",
+    Segments: [
+      /working,
+      folder
+    ]
+  },
+  NoWorkingDirectory: true,
+  ArgumentCustomization: {
+    Type: Func<ProcessArgumentBuilder, ProcessArgumentBuilder>,
+    Target: MinVerSettingsTests.<>c,
+    Method: Cake.Core.IO.ProcessArgumentBuilder Should_Shallow_Clone_All_Properties(Cake.Core.IO.ProcessArgumentBuilder)
+  },
+  EnvironmentVariables: {
+    MINVERTESTVAR: SOMEVALUE
+  },
+  HandleExitCode: {
+    Type: Func<Int32, Boolean>,
+    Target: MinVerSettingsTests.<>c,
+    Method: Boolean Should_Shallow_Clone_All_Properties(Int32)
+  }
+}

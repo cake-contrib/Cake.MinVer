@@ -16,19 +16,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using FluentAssertions;
 using Xunit;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Core.IO;
+using VerifyXunit;
+using System.Threading.Tasks;
 
 namespace Cake.MinVer.Tests
 {
+    [UsesVerify]
     public sealed class MinVerSettingsTests
     {
         [Fact]
-        public void Should_Shallow_Clone_All_Properties()
+        public Task Should_Shallow_Clone_All_Properties()
         {
             var expected = new MinVerSettings
             {
@@ -52,36 +52,7 @@ namespace Cake.MinVer.Tests
                 EnvironmentVariables = new Dictionary<string, string> { { "MINVERTESTVAR", "SOMEVALUE" } },
                 HandleExitCode = i => false,
             };
-
-            var actual = expected.Clone();
-
-            actual.AutoIncrement.Should().Be(expected.AutoIncrement);
-            actual.BuildMetadata.Should().Be(expected.BuildMetadata);
-            actual.DefaultPreReleasePhase.Should().Be(expected.DefaultPreReleasePhase);
-            actual.MinimumMajorMinor.Should().Be(expected.MinimumMajorMinor);
-            actual.Repo.Should().Be(expected.Repo);
-            actual.TagPrefix.Should().Be(expected.TagPrefix);
-            actual.PreferGlobalTool.Should().Be(expected.PreferGlobalTool);
-            actual.NoFallback.Should().Be(expected.NoFallback);
-            actual.Verbosity.Should().Be(expected.Verbosity);
-            actual.ToolVerbosity.Should().Be(expected.ToolVerbosity);
-
-            actual.DiagnosticOutput.Should().Be(expected.DiagnosticOutput);
-            actual.ToolPath.Should().Be(expected.ToolPath);
-            actual.ToolTimeout.Should().Be(expected.ToolTimeout);
-            actual.WorkingDirectory.Should().Be(expected.WorkingDirectory);
-            actual.NoWorkingDirectory.Should().Be(expected.NoWorkingDirectory);
-            actual.ArgumentCustomization.Should().Be(expected.ArgumentCustomization);
-            actual.EnvironmentVariables.Should().BeEquivalentTo(expected.EnvironmentVariables);
-            actual.HandleExitCode.Should().BeEquivalentTo(expected.HandleExitCode);
-
-            var properties = typeof(MinVerSettings)
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
-                .Select(p => p.Name)
-                .ToList();
-
-            // Sanity check & alarm to detect changes in properties that need to be considered in the cloning
-            properties.Should().HaveCount(18);
+            return Verifier.Verify(expected.Clone());
         }
     }
 }
