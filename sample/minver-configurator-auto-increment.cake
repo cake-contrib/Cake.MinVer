@@ -3,7 +3,7 @@
 // and increment the minor version
 //
 
-#addin "nuget:?package=Cake.MinVer&version=0.2.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.0"
 
 var version = MinVer(settings => settings.WithAutoIncrement(MinVerAutoIncrement.Minor));
 

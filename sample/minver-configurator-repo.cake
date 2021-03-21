@@ -3,7 +3,7 @@
 // and set the working directory for MinVer to use
 //
 
-#addin "nuget:?package=Cake.MinVer&version=0.2.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.0"
 
 var version = MinVer(settings => settings.WithRepo(@"C:\MyProject"));
 

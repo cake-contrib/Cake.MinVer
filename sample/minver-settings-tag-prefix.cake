@@ -3,7 +3,7 @@
 // and set the tag prefix
 //
 
-#addin "nuget:?package=Cake.MinVer&version=0.2.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.0"
 
 var settings = new MinVerSettings()
 {
