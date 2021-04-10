@@ -25,7 +25,7 @@ Thumbs.db
 
 #cake
 .cake/
-/build/*
-/tools/*
+/artifact/
 
+#verify
 *.received.*
