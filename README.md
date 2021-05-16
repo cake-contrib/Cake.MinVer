@@ -31,7 +31,7 @@ This addin exposes the functionality of [MinVer](https://github.com/adamralph/mi
 First of all, you need to import Cake.MinVer in your build script by using the [`addin`](http://cakebuild.net/docs/fundamentals/preprocessor-directives) directive:
 
 ```csharp
-#addin "nuget:?package=Cake.MinVer&version=1.0.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.1"
 ```
 
 _Make sure the `&version=` attribute references the [latest version of Cake.MinVer](https://www.nuget.org/packages/Cake.MinVer/) compatible with the Cake runner that you are using. Check the [compatibility table](#compatibility) to see which version of Cake.MinVer to choose_.
@@ -39,7 +39,7 @@ _Make sure the `&version=` attribute references the [latest version of Cake.MinV
 Next, call `MinVer()` in order to get the version information using the default settings:
 
 ```csharp
-#addin "nuget:?package=Cake.MinVer&version=1.0.0"
+#addin "nuget:?package=Cake.MinVer&version=1.0.1"
 
 var version = MinVer();
 
@@ -173,7 +173,7 @@ Cake.MinVer is compatible with all [Cake runners](https://cakebuild.net/docs/run
 
 | Cake runner     | Cake.MinVer       | Cake addin directive                                |
 |:---------------:|:-----------------:| --------------------------------------------------- |
-| 1.0.0 or higher | 1.0.0 or higher   | `#addin "nuget:?package=Cake.MinVer&version=1.0.0"` |
+| 1.0.0 or higher | 1.0.0 or higher   | `#addin "nuget:?package=Cake.MinVer&version=1.0.1"` |
 | 0.33.0 - 0.38.5 | 0.2.0             | `#addin "nuget:?package=Cake.MinVer&version=0.2.0"` |
 | < 0.33.0        | _N/A_             | _(not supported)_                                   |
 
@@ -185,7 +185,7 @@ For questions and to discuss ideas & feature requests, use the [GitHub discussio
 
 ## Release History
 
-Click on the [Releases](https://github.com/augustoproiete/Cake.MinVer/releases) tab on GitHub.
+Click on the [Releases](https://github.com/cake-contrib/Cake.MinVer/releases) tab on GitHub.
 
 ---
 
