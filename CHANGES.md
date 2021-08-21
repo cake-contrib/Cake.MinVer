@@ -1,1 +1,1 @@
-See: https://github.com/augustoproiete/Cake.MinVer/releases
+See: https://github.com/cake-contrib/Cake.MinVer/releases

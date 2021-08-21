@@ -60,7 +60,7 @@ Task("pack")
     .IsDependentOn("test")
     .Does(() =>
 {
-    var releaseNotes = $"https://github.com/augustoproiete/Cake.MinVer/releases/tag/v{buildVersion.Version}";
+    var releaseNotes = $"https://github.com/cake-contrib/Cake.MinVer/releases/tag/v{buildVersion.Version}";
 
     DotNetCorePack("./src/Cake.MinVer/Cake.MinVer.csproj", new DotNetCorePackSettings
     {
