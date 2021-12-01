@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet;
 using Cake.Core.IO;
 using VerifyXunit;
 using System.Threading.Tasks;
@@ -41,7 +41,7 @@ namespace Cake.MinVer.Tests
                 PreferGlobalTool = true,
                 NoFallback = true,
                 Verbosity = MinVerVerbosity.Trace,
-                ToolVerbosity = DotNetCoreVerbosity.Detailed,
+                ToolVerbosity = DotNetVerbosity.Detailed,
 
                 DiagnosticOutput = true,
                 ToolPath = FilePath.FromString("/tools/custom/minver.exe"),

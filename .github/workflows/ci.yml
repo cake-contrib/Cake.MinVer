@@ -28,9 +28,9 @@ jobs:
         job:
           - os: ubuntu-18.04
             build: ./build.sh
-            push: true
           - os: ubuntu-20.04
             build: ./build.sh
+            push: true
           - os: windows-2019
             build: ./build.cmd
           - os: windows-2022
@@ -50,6 +50,10 @@ jobs:
         uses: actions/setup-dotnet@v1.9.0
         with:
           dotnet-version: "5.0.401"
+      - name: Setup net6.0
+        uses: actions/setup-dotnet@v1.8.2
+        with:
+          dotnet-version: "6.0.100"
       - name: Run dotnet --info
         run: dotnet --info
       - uses: actions/checkout@v2.4.0
