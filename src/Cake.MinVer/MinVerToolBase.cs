@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -25,7 +25,7 @@ using Cake.Core.Tooling;
 
 namespace Cake.MinVer
 {
-    internal abstract class MinVerToolBase : DotNetCoreTool<MinVerSettings>, IMinVerTool
+    internal abstract class MinVerToolBase : DotNetTool<MinVerSettings>, IMinVerTool
     {
         protected MinVerToolBase(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
             IToolLocator tools, ICakeLog log)
@@ -250,15 +250,15 @@ namespace Cake.MinVer
             }
         }
 
-        private static MinVerVerbosity ToolToMinVerVerbosityConverter(DotNetCoreVerbosity toolVerbosity)
+        private static MinVerVerbosity ToolToMinVerVerbosityConverter(DotNetVerbosity toolVerbosity)
         {
             return toolVerbosity switch
             {
-                DotNetCoreVerbosity.Quiet => MinVerVerbosity.Error,
-                DotNetCoreVerbosity.Minimal => MinVerVerbosity.Warn,
-                DotNetCoreVerbosity.Normal => MinVerVerbosity.Info,
-                DotNetCoreVerbosity.Detailed => MinVerVerbosity.Debug,
-                DotNetCoreVerbosity.Diagnostic => MinVerVerbosity.Trace,
+                DotNetVerbosity.Quiet => MinVerVerbosity.Error,
+                DotNetVerbosity.Minimal => MinVerVerbosity.Warn,
+                DotNetVerbosity.Normal => MinVerVerbosity.Info,
+                DotNetVerbosity.Detailed => MinVerVerbosity.Debug,
+                DotNetVerbosity.Diagnostic => MinVerVerbosity.Trace,
                 _ => MinVerVerbosity.Info
             };
         }

@@ -16,7 +16,7 @@
 
 using System;
 using System.Globalization;
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -28,7 +28,7 @@ namespace Cake.MinVer
     /// <summary>
     /// MinVer dotnet tool.
     /// </summary>
-    public class MinVerTool : DotNetCoreTool<MinVerSettings>
+    public class MinVerTool : DotNetTool<MinVerSettings>
     {
         private readonly IMinVerLocalTool _localTool;
         private readonly IMinVerGlobalTool _globalTool;

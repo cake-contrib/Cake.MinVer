@@ -15,7 +15,7 @@
 #endregion
 
 using System;
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet;
 using Cake.Core.IO;
 
 namespace Cake.MinVer
@@ -23,7 +23,7 @@ namespace Cake.MinVer
     /// <summary>
     /// Contains settings used by <see cref="MinVerTool" />.
     /// </summary>
-    public class MinVerSettings : DotNetCoreSettings, ICloneable
+    public class MinVerSettings : DotNetSettings, ICloneable
     {
         /// <summary>
         /// Set the version part to be automatically incremented.
@@ -95,7 +95,7 @@ namespace Cake.MinVer
         /// </summary>
         public new MinVerVerbosity? Verbosity { get; set; }
 
-        internal DotNetCoreVerbosity? ToolVerbosity
+        internal DotNetVerbosity? ToolVerbosity
         {
             get => base.Verbosity;
             set => base.Verbosity = value;
