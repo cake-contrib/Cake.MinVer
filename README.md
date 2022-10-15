@@ -190,4 +190,4 @@ Click on the [Releases](https://github.com/cake-contrib/Cake.MinVer/releases) ta
 
 ---
 
-_Copyright &copy; 2020-2021 C. Augusto Proiete & Contributors - Provided under the [MIT License](LICENSE)._
+_Copyright &copy; 2020-2022 C. Augusto Proiete & Contributors - Provided under the [MIT License](LICENSE)._
