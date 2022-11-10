@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
     <RootNamespace>Cake.MinVer</RootNamespace>
 
     <AssemblyName>Cake.MinVer</AssemblyName>
@@ -28,7 +28,7 @@
     <Authors>C. Augusto Proiete &amp; Contributors</Authors>
     <Company>augustoproiete.net</Company>
     <Description>Cake add-in that makes MinVer available as a tool in Cake.</Description>
-    <Copyright>Copyright 2020-2021 C. Augusto Proiete &amp; Contributors - Provided under the MIT License</Copyright>
+    <Copyright>Copyright 2020-2022 C. Augusto Proiete &amp; Contributors - Provided under the MIT License</Copyright>
     <PackageTags>cake;minver;cake-addin;cake-build;cake-contrib;addin;script;build;cake-contrib;augustoproiete;augusto-proiete</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>images\icon.png</PackageIcon>
@@ -40,8 +40,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="2.0.0" PrivateAssets="All" />
-    <PackageReference Include="Cake.Common" Version="2.0.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Core" Version="3.0.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Common" Version="3.0.0" PrivateAssets="All" />
 
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
