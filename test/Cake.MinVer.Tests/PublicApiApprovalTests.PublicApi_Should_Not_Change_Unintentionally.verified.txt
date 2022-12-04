@@ -1,0 +1,88 @@
+namespace Cake.MinVer
+{
+    [Cake.Core.Annotations.CakeAliasCategory("MinVer")]
+    [Cake.Core.Annotations.CakeNamespaceImport("Cake.MinVer")]
+    public static class MinVerAliases
+    {
+        [Cake.Core.Annotations.CakeAliasCategory("MinVer")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static Cake.MinVer.MinVerVersion MinVer(this Cake.Core.ICakeContext context) { }
+        [Cake.Core.Annotations.CakeAliasCategory("MinVer")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static Cake.MinVer.MinVerVersion MinVer(this Cake.Core.ICakeContext context, Cake.MinVer.MinVerSettings settings) { }
+        [Cake.Core.Annotations.CakeAliasCategory("MinVer")]
+        [Cake.Core.Annotations.CakeMethodAlias]
+        public static Cake.MinVer.MinVerVersion MinVer(this Cake.Core.ICakeContext context, System.Action<Cake.MinVer.MinVerSettings> configurator) { }
+    }
+    public enum MinVerAutoIncrement
+    {
+        Major = 0,
+        Minor = 1,
+        Patch = 2,
+    }
+    public class MinVerSettings : Cake.Common.Tools.DotNet.DotNetSettings, System.ICloneable
+    {
+        public MinVerSettings() { }
+        public Cake.MinVer.MinVerAutoIncrement? AutoIncrement { get; set; }
+        public string BuildMetadata { get; set; }
+        public string DefaultPreReleasePhase { get; set; }
+        public string MinimumMajorMinor { get; set; }
+        public bool? NoFallback { get; set; }
+        public bool? PreferGlobalTool { get; set; }
+        public Cake.Core.IO.DirectoryPath Repo { get; set; }
+        public string TagPrefix { get; set; }
+        public Cake.MinVer.MinVerVerbosity? Verbosity { get; set; }
+        public Cake.MinVer.MinVerSettings Clone() { }
+    }
+    public static class MinVerSettingsExtensions
+    {
+        public static Cake.MinVer.MinVerSettings FromPath(this Cake.MinVer.MinVerSettings settings, Cake.Core.IO.DirectoryPath path) { }
+        public static Cake.MinVer.MinVerSettings WithAutoIncrement(this Cake.MinVer.MinVerSettings settings, Cake.MinVer.MinVerAutoIncrement autoIncrement) { }
+        public static Cake.MinVer.MinVerSettings WithBuildMetadata(this Cake.MinVer.MinVerSettings settings, string buildMetadata) { }
+        public static Cake.MinVer.MinVerSettings WithDefaultPreReleasePhase(this Cake.MinVer.MinVerSettings settings, string defaultPreReleasePhase) { }
+        public static Cake.MinVer.MinVerSettings WithMinimumMajorMinor(this Cake.MinVer.MinVerSettings settings, string minimumMajorMinor) { }
+        public static Cake.MinVer.MinVerSettings WithNoFallback(this Cake.MinVer.MinVerSettings settings) { }
+        public static Cake.MinVer.MinVerSettings WithPreferGlobalTool(this Cake.MinVer.MinVerSettings settings) { }
+        public static Cake.MinVer.MinVerSettings WithRepo(this Cake.MinVer.MinVerSettings settings, Cake.Core.IO.DirectoryPath repo) { }
+        public static Cake.MinVer.MinVerSettings WithTagPrefix(this Cake.MinVer.MinVerSettings settings, string tagPrefix) { }
+        public static Cake.MinVer.MinVerSettings WithToolPath(this Cake.MinVer.MinVerSettings settings, Cake.Core.IO.FilePath toolPath) { }
+        public static Cake.MinVer.MinVerSettings WithVerbosity(this Cake.MinVer.MinVerSettings settings, Cake.MinVer.MinVerVerbosity verbosity) { }
+    }
+    public class MinVerTool : Cake.Common.Tools.DotNet.DotNetTool<Cake.MinVer.MinVerSettings>
+    {
+        public MinVerTool(Cake.Core.IO.IFileSystem fileSystem, Cake.Core.ICakeEnvironment environment, Cake.Core.IO.IProcessRunner processRunner, Cake.Core.Tooling.IToolLocator tools, Cake.Core.Diagnostics.ICakeLog log) { }
+        public Cake.Core.Diagnostics.ICakeLog CakeLog { get; }
+        protected override string GetToolName() { }
+        public Cake.MinVer.MinVerVersion Run(Cake.MinVer.MinVerSettings settings) { }
+    }
+    public enum MinVerVerbosity
+    {
+        Error = 0,
+        Warn = 1,
+        Info = 2,
+        Debug = 3,
+        Trace = 4,
+    }
+    public class MinVerVersion : System.IComparable<Cake.MinVer.MinVerVersion>
+    {
+        protected MinVerVersion() { }
+        public MinVerVersion(string versionString) { }
+        public string AssemblyVersion { get; }
+        public string BuildMetadata { get; }
+        public string FileVersion { get; }
+        public string InformationalVersion { get; }
+        public bool IsPreRelease { get; }
+        public int Major { get; }
+        public int Minor { get; }
+        public string PackageVersion { get; }
+        public int Patch { get; }
+        public string PreRelease { get; }
+        public string Version { get; }
+        public int CompareTo(Cake.MinVer.MinVerVersion other) { }
+        public override int GetHashCode() { }
+        public override string ToString() { }
+        public static Cake.MinVer.MinVerVersion Parse(string versionString) { }
+        public static bool TryParse(string versionString, out Cake.MinVer.MinVerVersion version) { }
+        public static string op_Implicit(Cake.MinVer.MinVerVersion version) { }
+    }
+}
