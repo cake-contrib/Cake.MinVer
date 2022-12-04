@@ -19,7 +19,7 @@ using PublicApiGenerator;
 using VerifyXunit;
 using Xunit;
 
-namespace Cake.MinVer.ApprovalTests;
+namespace Cake.MinVer.Tests;
 
 /// <summary>
 /// Tests for checking changes to the public API.
