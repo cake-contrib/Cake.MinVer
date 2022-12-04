@@ -44,7 +44,7 @@ namespace Cake.MinVer.Tests
             fixture.LocalTool.ShouldHaveRunOnce();
             fixture.GlobalTool.ShouldNotHaveRun();
 
-            result.Version.Should().Be(MinVerToolOutputs.DefaultVersionForLocalTool);
+            result.Version.Should().BeEquivalentTo(MinVerToolOutputs.DefaultVersionForLocalTool);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Cake.MinVer.Tests
             fixture.GlobalTool.ShouldHaveRunOnce();
             fixture.LocalTool.ShouldNotHaveRun();
 
-            result.Version.Should().Be(MinVerToolOutputs.DefaultVersionForGlobalTool);
+            result.Version.Should().BeEquivalentTo(MinVerToolOutputs.DefaultVersionForGlobalTool);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Cake.MinVer.Tests
             fixture.LocalTool.ShouldHaveRunFirst();
             fixture.GlobalTool.ShouldHaveRunSecond();
 
-            result.Version.Should().Be(MinVerToolOutputs.DefaultVersionForGlobalTool);
+            result.Version.Should().BeEquivalentTo(MinVerToolOutputs.DefaultVersionForGlobalTool);
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace Cake.MinVer.Tests
             fixture.GlobalTool.ShouldHaveRunFirst();
             fixture.LocalTool.ShouldHaveRunSecond();
 
-            result.Version.Should().Be(MinVerToolOutputs.DefaultVersionForLocalTool);
+            result.Version.Should().BeEquivalentTo(MinVerToolOutputs.DefaultVersionForLocalTool);
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace Cake.MinVer.Tests
             fixture.GlobalTool.ShouldHaveRunOnce();
             fixture.LocalTool.ShouldNotHaveRun();
 
-            result.Version.Should().Be(MinVerToolOutputs.DefaultVersionForGlobalTool);
+            result.Version.Should().BeEquivalentTo(MinVerToolOutputs.DefaultVersionForGlobalTool);
         }
 
         [Fact]

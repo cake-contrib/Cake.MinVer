@@ -1,4 +1,4 @@
-{
+﻿{
   AutoIncrement: Minor,
   BuildMetadata: 123,
   DefaultPreReleasePhase: preview,
@@ -22,7 +22,7 @@
     MINVERTESTVAR: SOMEVALUE
   },
   HandleExitCode: {
-    Type: Func<Int32, Boolean>,
+    Type: Func<int, bool>,
     Target: MinVerSettingsTests.<>c,
     Method: Boolean Should_Shallow_Clone_All_Properties(Int32)
   }

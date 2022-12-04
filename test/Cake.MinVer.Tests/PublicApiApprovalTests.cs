@@ -22,12 +22,14 @@ using Xunit;
 namespace Cake.MinVer.Tests;
 
 /// <summary>
-/// Tests for checking changes to the public API.
+/// Tests for checking changes to the public API
 /// </summary>
 [UsesVerify]
 public class PublicApiApprovalTests
 {
-    /// <summary>Check for changes to the public APIs.</summary>
+    /// <summary>
+    /// Check for changes to the public APIs
+    /// </summary>
     [Fact]
     public async Task PublicApi_Should_Not_Change_Unintentionally()
     {
