@@ -10,10 +10,12 @@
     <PackageReference Include="Cake.Common" Version="3.0.0" />
     <PackageReference Include="Cake.Testing" Version="3.0.0" />
 
+    <PackageReference Include="PublicApiGenerator" Version="10.3.0" />
+
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.9.1" />
     <PackageReference Include="Verify.Xunit" Version="11.0.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -27,6 +29,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Cake.MinVer\Cake.MinVer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PublicApiApprovalTests.PublicApi_Should_Not_Change_Unintentionally.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>PublicApiApprovalTests.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>
