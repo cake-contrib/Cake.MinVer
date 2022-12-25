@@ -25,7 +25,7 @@ Thumbs.db
 
 #cake
 .cake/
-/artifact/
+/artifact/*
 
 #verify
 *.received.*

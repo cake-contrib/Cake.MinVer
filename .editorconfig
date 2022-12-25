@@ -18,3 +18,6 @@ end_of_line = lf
 
 [*.{dotsettings}]
 end_of_line = lf
+
+[*.verified.txt]
+end_of_line = lf
