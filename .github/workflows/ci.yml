@@ -1,11 +1,7 @@
 on:
   push:
     branches:
-      - master
-      - develop
-      - "feature/**"
-      - "release/**"
-      - "hotfix/**"
+      - "**"
     tags:
       - "*.*.*"
     paths-ignore:
