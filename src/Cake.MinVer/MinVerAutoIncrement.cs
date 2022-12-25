@@ -14,27 +14,26 @@
 //
 #endregion
 
-namespace Cake.MinVer
+namespace Cake.MinVer;
+
+/// <summary>
+/// --auto-increment &lt;VERSION_PART&gt;
+/// major, minor, or patch (default)
+/// </summary>
+public enum MinVerAutoIncrement
 {
     /// <summary>
-    /// --auto-increment &lt;VERSION_PART&gt;
-    /// major, minor, or patch (default)
+    /// --auto-increment major
     /// </summary>
-    public enum MinVerAutoIncrement
-    {
-        /// <summary>
-        /// --auto-increment major
-        /// </summary>
-        Major,
+    Major,
 
-        /// <summary>
-        /// --auto-increment minor
-        /// </summary>
-        Minor,
+    /// <summary>
+    /// --auto-increment minor
+    /// </summary>
+    Minor,
 
-        /// <summary>
-        /// --auto-increment patch
-        /// </summary>
-        Patch,
-    }
+    /// <summary>
+    /// --auto-increment patch
+    /// </summary>
+    Patch,
 }

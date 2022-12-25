@@ -20,42 +20,41 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.MinVer
+namespace Cake.MinVer;
+
+internal class MinVerGlobalTool : MinVerToolBase, IMinVerGlobalTool
 {
-    internal class MinVerGlobalTool : MinVerToolBase, IMinVerGlobalTool
+    public MinVerGlobalTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+        IToolLocator tools, ICakeLog log)
+        : base(fileSystem, environment, processRunner, tools, log)
     {
-        public MinVerGlobalTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
-            IToolLocator tools, ICakeLog log)
-            : base(fileSystem, environment, processRunner, tools, log)
+    }
+
+    /// <inheritdoc />
+    protected override ProcessArgumentBuilder GetArguments(MinVerSettings settings)
+    {
+        var command = new ProcessArgumentBuilder();
+        var args = CreateArgumentBuilder(settings);
+
+        if (!args.IsNullOrEmpty())
         {
+            args.CopyTo(command);
         }
 
-        /// <inheritdoc />
-        protected override ProcessArgumentBuilder GetArguments(MinVerSettings settings)
-        {
-            var command = new ProcessArgumentBuilder();
-            var args = CreateArgumentBuilder(settings);
+        CakeLog.Verbose("{0} arguments: [{1}]", GetToolName(), args.RenderSafe());
 
-            if (!args.IsNullOrEmpty())
-            {
-                args.CopyTo(command);
-            }
+        return command;
+    }
 
-            CakeLog.Verbose("{0} arguments: [{1}]", GetToolName(), args.RenderSafe());
+    /// <inheritdoc />
+    protected override string GetToolName()
+    {
+        return "MinVer Global Tool (minver)";
+    }
 
-            return command;
-        }
-
-        /// <inheritdoc />
-        protected override string GetToolName()
-        {
-            return "MinVer Global Tool (minver)";
-        }
-
-        /// <inheritdoc />
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new [] { "minver", "minver.exe" };
-        }
+    /// <inheritdoc />
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new [] { "minver", "minver.exe" };
     }
 }

@@ -14,12 +14,11 @@
 //
 #endregion
 
-namespace Cake.MinVer
-{
-    internal interface IMinVerTool
-    {
-        string ToolName { get; }
+namespace Cake.MinVer;
 
-        int TryRun(MinVerSettings settings, out MinVerVersion result);
-    }
+internal interface IMinVerTool
+{
+    string ToolName { get; }
+
+    int TryRun(MinVerSettings settings, out MinVerVersion result);
 }

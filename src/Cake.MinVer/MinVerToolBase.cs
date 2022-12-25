@@ -23,262 +23,261 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.MinVer
+namespace Cake.MinVer;
+
+internal abstract class MinVerToolBase : DotNetTool<MinVerSettings>, IMinVerTool
 {
-    internal abstract class MinVerToolBase : DotNetTool<MinVerSettings>, IMinVerTool
+    protected MinVerToolBase(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+        IToolLocator tools, ICakeLog log)
+        : base(fileSystem, environment, processRunner, tools)
     {
-        protected MinVerToolBase(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
-            IToolLocator tools, ICakeLog log)
-            : base(fileSystem, environment, processRunner, tools)
+        CakeLog = log ?? throw new ArgumentNullException(nameof(log));
+    }
+
+    public ICakeLog CakeLog { get; }
+
+    public string ToolName => GetToolName();
+
+    public int TryRun(MinVerSettings settings, out MinVerVersion version)
+    {
+        if (settings is null)
         {
-            CakeLog = log ?? throw new ArgumentNullException(nameof(log));
+            throw new ArgumentNullException(nameof(settings));
         }
 
-        public ICakeLog CakeLog { get; }
+        string[] standardOutput = null;
+        MinVerVersion minVerVersion = null;
+        int? exitCode = 1;
+        var minVerArgs = GetArguments(settings);
 
-        public string ToolName => GetToolName();
-
-        public int TryRun(MinVerSettings settings, out MinVerVersion version)
+        var processSettings = new ProcessSettings
         {
-            if (settings is null)
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            Silent = true,
+            RedirectedStandardOutputHandler = output =>
             {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            string[] standardOutput = null;
-            MinVerVersion minVerVersion = null;
-            int? exitCode = 1;
-            var minVerArgs = GetArguments(settings);
-
-            var processSettings = new ProcessSettings
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                Silent = true,
-                RedirectedStandardOutputHandler = output =>
+                if (!(output is null))
                 {
-                    if (!(output is null))
-                    {
-                        CakeLog.Verbose(output);
-                    }
+                    CakeLog.Verbose(output);
+                }
 
-                    return output;
-                },
-                RedirectedStandardErrorHandler = error =>
+                return output;
+            },
+            RedirectedStandardErrorHandler = error =>
+            {
+                if (!(error is null))
                 {
-                    if (!(error is null))
-                    {
-                        CakeLog.Verbose(error);
-                    }
+                    CakeLog.Verbose(error);
+                }
 
-                    return error;
-                },
-            };
+                return error;
+            },
+        };
 
-            try
+        try
+        {
+            Run(settings, minVerArgs, processSettings, p =>
             {
-                Run(settings, minVerArgs, processSettings, p =>
+                exitCode = p.GetExitCode();
+                if (exitCode == 0)
                 {
-                    exitCode = p.GetExitCode();
-                    if (exitCode == 0)
-                    {
-                        standardOutput = p.GetStandardOutput()?.ToArray() ?? new string[0];
-                    }
-                });
-            }
-            catch (CakeException ex)
-            {
-                CakeLog.Verbose(ex.ToString());
-            }
-
-            if (exitCode == 0)
-            {
-                minVerVersion = ParseVersion(standardOutput);
-            }
-
-            version = minVerVersion;
-            return exitCode.GetValueOrDefault();
+                    standardOutput = p.GetStandardOutput()?.ToArray() ?? new string[0];
+                }
+            });
+        }
+        catch (CakeException ex)
+        {
+            CakeLog.Verbose(ex.ToString());
         }
 
-        protected override void ProcessExitCode(int exitCode)
+        if (exitCode == 0)
         {
-            // Do nothing
+            minVerVersion = ParseVersion(standardOutput);
         }
 
-        protected abstract ProcessArgumentBuilder GetArguments(MinVerSettings settings);
+        version = minVerVersion;
+        return exitCode.GetValueOrDefault();
+    }
 
-        /// <summary>
-        /// Creates a <see cref="ProcessArgumentBuilder" /> and adds common commandline arguments.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>Instance of <see cref="ProcessArgumentBuilder" />.</returns>
-        protected new ProcessArgumentBuilder CreateArgumentBuilder(MinVerSettings settings)
+    protected override void ProcessExitCode(int exitCode)
+    {
+        // Do nothing
+    }
+
+    protected abstract ProcessArgumentBuilder GetArguments(MinVerSettings settings);
+
+    /// <summary>
+    /// Creates a <see cref="ProcessArgumentBuilder" /> and adds common commandline arguments.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <returns>Instance of <see cref="ProcessArgumentBuilder" />.</returns>
+    protected new ProcessArgumentBuilder CreateArgumentBuilder(MinVerSettings settings)
+    {
+        var args = base.CreateArgumentBuilder(settings);
+
+        AppendAutoIncrement(args, settings);
+        AppendBuildMetadata(args, settings);
+        AppendDefaultPreReleasePhase(args, settings);
+        AppendMinimumMajorMinor(args, settings);
+        AppendRepo(args, settings);
+        AppendTagPrefix(args, settings);
+        AppendVerbosity(args, settings);
+
+        return args;
+    }
+
+    private static void AppendAutoIncrement(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        if (!settings.AutoIncrement.HasValue)
         {
-            var args = base.CreateArgumentBuilder(settings);
-
-            AppendAutoIncrement(args, settings);
-            AppendBuildMetadata(args, settings);
-            AppendDefaultPreReleasePhase(args, settings);
-            AppendMinimumMajorMinor(args, settings);
-            AppendRepo(args, settings);
-            AppendTagPrefix(args, settings);
-            AppendVerbosity(args, settings);
-
-            return args;
+            return;
         }
 
-        private static void AppendAutoIncrement(ProcessArgumentBuilder args, MinVerSettings settings)
+        switch (settings.AutoIncrement.Value)
         {
-            if (!settings.AutoIncrement.HasValue)
-            {
-                return;
-            }
+            case MinVerAutoIncrement.Major:
+                args.Append("--auto-increment major");
+                break;
 
-            switch (settings.AutoIncrement.Value)
-            {
-                case MinVerAutoIncrement.Major:
-                    args.Append("--auto-increment major");
-                    break;
+            case MinVerAutoIncrement.Minor:
+                args.Append("--auto-increment minor");
+                break;
 
-                case MinVerAutoIncrement.Minor:
-                    args.Append("--auto-increment minor");
-                    break;
+            case MinVerAutoIncrement.Patch:
+                args.Append("--auto-increment patch");
+                break;
 
-                case MinVerAutoIncrement.Patch:
-                    args.Append("--auto-increment patch");
-                    break;
+            default:
+                throw new CakeException($"{nameof(settings.AutoIncrement)}={(int)settings.AutoIncrement.Value} is invalid");
+        }
+    }
 
-                default:
-                    throw new CakeException($"{nameof(settings.AutoIncrement)}={(int)settings.AutoIncrement.Value} is invalid");
-            }
+    private static void AppendBuildMetadata(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.BuildMetadata))
+        {
+            return;
         }
 
-        private static void AppendBuildMetadata(ProcessArgumentBuilder args, MinVerSettings settings)
-        {
-            if (string.IsNullOrWhiteSpace(settings.BuildMetadata))
-            {
-                return;
-            }
+        args.Append("--build-metadata");
+        args.AppendQuoted(settings.BuildMetadata);
+    }
 
-            args.Append("--build-metadata");
-            args.AppendQuoted(settings.BuildMetadata);
+    private static void AppendDefaultPreReleasePhase(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.DefaultPreReleasePhase))
+        {
+            return;
         }
 
-        private static void AppendDefaultPreReleasePhase(ProcessArgumentBuilder args, MinVerSettings settings)
-        {
-            if (string.IsNullOrWhiteSpace(settings.DefaultPreReleasePhase))
-            {
-                return;
-            }
+        args.Append("--default-pre-release-phase");
+        args.AppendQuoted(settings.DefaultPreReleasePhase);
+    }
 
-            args.Append("--default-pre-release-phase");
-            args.AppendQuoted(settings.DefaultPreReleasePhase);
+    private static void AppendMinimumMajorMinor(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.MinimumMajorMinor))
+        {
+            return;
         }
 
-        private static void AppendMinimumMajorMinor(ProcessArgumentBuilder args, MinVerSettings settings)
-        {
-            if (string.IsNullOrWhiteSpace(settings.MinimumMajorMinor))
-            {
-                return;
-            }
+        args.Append("--minimum-major-minor");
+        args.AppendQuoted(settings.MinimumMajorMinor);
+    }
 
-            args.Append("--minimum-major-minor");
-            args.AppendQuoted(settings.MinimumMajorMinor);
+    private static void AppendRepo(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.Repo?.FullPath))
+        {
+            return;
         }
 
-        private static void AppendRepo(ProcessArgumentBuilder args, MinVerSettings settings)
-        {
-            if (string.IsNullOrWhiteSpace(settings.Repo?.FullPath))
-            {
-                return;
-            }
+        args.Append("--repo");
+        args.AppendQuoted(settings.Repo.FullPath);
+    }
 
-            args.Append("--repo");
-            args.AppendQuoted(settings.Repo.FullPath);
+    private static void AppendTagPrefix(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.TagPrefix))
+        {
+            return;
         }
 
-        private static void AppendTagPrefix(ProcessArgumentBuilder args, MinVerSettings settings)
-        {
-            if (string.IsNullOrWhiteSpace(settings.TagPrefix))
-            {
-                return;
-            }
+        args.Append("--tag-prefix");
+        args.AppendQuoted(settings.TagPrefix);
+    }
 
-            args.Append("--tag-prefix");
-            args.AppendQuoted(settings.TagPrefix);
+    private static void AppendVerbosity(ProcessArgumentBuilder args, MinVerSettings settings)
+    {
+        var verbosity = settings.Verbosity;
+        var toolVerbosity = settings.ToolVerbosity;
+
+        if (!verbosity.HasValue && toolVerbosity.HasValue)
+        {
+            verbosity = ToolToMinVerVerbosityConverter(toolVerbosity.Value);
         }
 
-        private static void AppendVerbosity(ProcessArgumentBuilder args, MinVerSettings settings)
+        if (!verbosity.HasValue)
         {
-            var verbosity = settings.Verbosity;
-            var toolVerbosity = settings.ToolVerbosity;
-
-            if (!verbosity.HasValue && toolVerbosity.HasValue)
-            {
-                verbosity = ToolToMinVerVerbosityConverter(toolVerbosity.Value);
-            }
-
-            if (!verbosity.HasValue)
-            {
-                return;
-            }
-
-            switch (verbosity)
-            {
-                case MinVerVerbosity.Error:
-                    args.Append("--verbosity error");
-                    break;
-
-                case MinVerVerbosity.Warn:
-                    args.Append("--verbosity warn");
-                    break;
-
-                case MinVerVerbosity.Info:
-                    args.Append("--verbosity info");
-                    break;
-
-                case MinVerVerbosity.Debug:
-                    args.Append("--verbosity debug");
-                    break;
-
-                case MinVerVerbosity.Trace:
-                    args.Append("--verbosity trace");
-                    break;
-
-                default:
-                    throw new CakeException($"{nameof(settings.Verbosity)}={(int)verbosity.Value} is invalid");
-            }
+            return;
         }
 
-        private static MinVerVerbosity ToolToMinVerVerbosityConverter(DotNetVerbosity toolVerbosity)
+        switch (verbosity)
         {
-            return toolVerbosity switch
-            {
-                DotNetVerbosity.Quiet => MinVerVerbosity.Error,
-                DotNetVerbosity.Minimal => MinVerVerbosity.Warn,
-                DotNetVerbosity.Normal => MinVerVerbosity.Info,
-                DotNetVerbosity.Detailed => MinVerVerbosity.Debug,
-                DotNetVerbosity.Diagnostic => MinVerVerbosity.Trace,
-                _ => MinVerVerbosity.Info
-            };
+            case MinVerVerbosity.Error:
+                args.Append("--verbosity error");
+                break;
+
+            case MinVerVerbosity.Warn:
+                args.Append("--verbosity warn");
+                break;
+
+            case MinVerVerbosity.Info:
+                args.Append("--verbosity info");
+                break;
+
+            case MinVerVerbosity.Debug:
+                args.Append("--verbosity debug");
+                break;
+
+            case MinVerVerbosity.Trace:
+                args.Append("--verbosity trace");
+                break;
+
+            default:
+                throw new CakeException($"{nameof(settings.Verbosity)}={(int)verbosity.Value} is invalid");
+        }
+    }
+
+    private static MinVerVerbosity ToolToMinVerVerbosityConverter(DotNetVerbosity toolVerbosity)
+    {
+        return toolVerbosity switch
+        {
+            DotNetVerbosity.Quiet => MinVerVerbosity.Error,
+            DotNetVerbosity.Minimal => MinVerVerbosity.Warn,
+            DotNetVerbosity.Normal => MinVerVerbosity.Info,
+            DotNetVerbosity.Detailed => MinVerVerbosity.Debug,
+            DotNetVerbosity.Diagnostic => MinVerVerbosity.Trace,
+            _ => MinVerVerbosity.Info
+        };
+    }
+
+    private static MinVerVersion ParseVersion(IEnumerable<string> standardOutput)
+    {
+        var version = standardOutput?.LastOrDefault();
+        if (string.IsNullOrWhiteSpace(version))
+        {
+            throw new CakeException($"Version '{version}' is not valid.");
         }
 
-        private static MinVerVersion ParseVersion(IEnumerable<string> standardOutput)
+        try
         {
-            var version = standardOutput?.LastOrDefault();
-            if (string.IsNullOrWhiteSpace(version))
-            {
-                throw new CakeException($"Version '{version}' is not valid.");
-            }
-
-            try
-            {
-                return new MinVerVersion(version);
-            }
-            catch (Exception ex)
-            {
-                throw new CakeException($"Version '{version}' is not valid.", ex);
-            }
+            return new MinVerVersion(version);
+        }
+        catch (Exception ex)
+        {
+            throw new CakeException($"Version '{version}' is not valid.", ex);
         }
     }
 }

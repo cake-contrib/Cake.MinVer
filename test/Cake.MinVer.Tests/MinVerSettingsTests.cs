@@ -22,37 +22,36 @@ using Cake.Core.IO;
 using VerifyXunit;
 using System.Threading.Tasks;
 
-namespace Cake.MinVer.Tests
-{
-    [UsesVerify]
-    public sealed class MinVerSettingsTests
-    {
-        [Fact]
-        public Task Should_Shallow_Clone_All_Properties()
-        {
-            var expected = new MinVerSettings
-            {
-                AutoIncrement = MinVerAutoIncrement.Minor,
-                BuildMetadata = "123",
-                DefaultPreReleasePhase = "preview",
-                MinimumMajorMinor = "1.2",
-                Repo = DirectoryPath.FromString("/repo/custom"),
-                TagPrefix = "v",
-                PreferGlobalTool = true,
-                NoFallback = true,
-                Verbosity = MinVerVerbosity.Trace,
-                ToolVerbosity = DotNetVerbosity.Detailed,
+namespace Cake.MinVer.Tests;
 
-                DiagnosticOutput = true,
-                ToolPath = FilePath.FromString("/tools/custom/minver.exe"),
-                ToolTimeout = TimeSpan.FromMinutes(5),
-                WorkingDirectory = DirectoryPath.FromString("/working/folder"),
-                NoWorkingDirectory = true,
-                ArgumentCustomization = s => s,
-                EnvironmentVariables = new Dictionary<string, string> { { "MINVERTESTVAR", "SOMEVALUE" } },
-                HandleExitCode = i => false,
-            };
-            return Verifier.Verify(expected.Clone());
-        }
+[UsesVerify]
+public sealed class MinVerSettingsTests
+{
+    [Fact]
+    public Task Should_Shallow_Clone_All_Properties()
+    {
+        var expected = new MinVerSettings
+        {
+            AutoIncrement = MinVerAutoIncrement.Minor,
+            BuildMetadata = "123",
+            DefaultPreReleasePhase = "preview",
+            MinimumMajorMinor = "1.2",
+            Repo = DirectoryPath.FromString("/repo/custom"),
+            TagPrefix = "v",
+            PreferGlobalTool = true,
+            NoFallback = true,
+            Verbosity = MinVerVerbosity.Trace,
+            ToolVerbosity = DotNetVerbosity.Detailed,
+
+            DiagnosticOutput = true,
+            ToolPath = FilePath.FromString("/tools/custom/minver.exe"),
+            ToolTimeout = TimeSpan.FromMinutes(5),
+            WorkingDirectory = DirectoryPath.FromString("/working/folder"),
+            NoWorkingDirectory = true,
+            ArgumentCustomization = s => s,
+            EnvironmentVariables = new Dictionary<string, string> { { "MINVERTESTVAR", "SOMEVALUE" } },
+            HandleExitCode = i => false,
+        };
+        return Verifier.Verify(expected.Clone());
     }
 }

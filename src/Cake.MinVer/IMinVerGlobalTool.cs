@@ -14,9 +14,8 @@
 //
 #endregion
 
-namespace Cake.MinVer
+namespace Cake.MinVer;
+
+internal interface IMinVerGlobalTool : IMinVerTool
 {
-    internal interface IMinVerGlobalTool : IMinVerTool
-    {
-    }
 }

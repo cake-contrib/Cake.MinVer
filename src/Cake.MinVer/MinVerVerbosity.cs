@@ -14,37 +14,36 @@
 //
 #endregion
 
-namespace Cake.MinVer
+namespace Cake.MinVer;
+
+/// <summary>
+/// --verbosity &lt;VERBOSITY&gt;
+/// error, warn, info (default), debug, or trace
+/// </summary>
+public enum MinVerVerbosity
 {
     /// <summary>
-    /// --verbosity &lt;VERBOSITY&gt;
-    /// error, warn, info (default), debug, or trace
+    /// --verbosity error
     /// </summary>
-    public enum MinVerVerbosity
-    {
-        /// <summary>
-        /// --verbosity error
-        /// </summary>
-        Error,
+    Error,
 
-        /// <summary>
-        /// --verbosity warn
-        /// </summary>
-        Warn,
+    /// <summary>
+    /// --verbosity warn
+    /// </summary>
+    Warn,
 
-        /// <summary>
-        /// --verbosity info
-        /// </summary>
-        Info,
+    /// <summary>
+    /// --verbosity info
+    /// </summary>
+    Info,
 
-        /// <summary>
-        /// --verbosity debug
-        /// </summary>
-        Debug,
+    /// <summary>
+    /// --verbosity debug
+    /// </summary>
+    Debug,
 
-        /// <summary>
-        /// --verbosity trace
-        /// </summary>
-        Trace,
-    }
+    /// <summary>
+    /// --verbosity trace
+    /// </summary>
+    Trace,
 }
