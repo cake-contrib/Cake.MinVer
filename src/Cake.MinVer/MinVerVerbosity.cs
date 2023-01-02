@@ -1,4 +1,4 @@
-﻿#region Copyright 2020-2022 C. Augusto Proiete & Contributors
+﻿#region Copyright 2020-2023 C. Augusto Proiete & Contributors
 //
 // Licensed under the MIT (the "License");
 // you may not use this file except in compliance with the License.
