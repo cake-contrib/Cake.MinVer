@@ -32,6 +32,10 @@ jobs:
     name: ${{ matrix.job.os }}
     runs-on: ${{ matrix.job.os }}
     steps:
+      - name: Setup net8.0
+        uses: actions/setup-dotnet@v4.0.1
+        with:
+          dotnet-version: "8.0.303"
       - name: Setup net6.0
         uses: actions/setup-dotnet@v4.0.1
         with:
