@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="3.0.0" />
-    <PackageReference Include="Cake.Common" Version="3.0.0" />
-    <PackageReference Include="Cake.Testing" Version="3.0.0" />
+    <PackageReference Include="Cake.Core" Version="4.0.0" />
+    <PackageReference Include="Cake.Common" Version="4.0.0" />
+    <PackageReference Include="Cake.Testing" Version="4.0.0" />
 
     <PackageReference Include="PublicApiGenerator" Version="10.3.0" />
 
